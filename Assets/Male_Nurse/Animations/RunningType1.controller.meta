@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1bee5c652575d8240965506a23ef2b37
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Animations/RunningType1.controller
+  uploadId: 682499

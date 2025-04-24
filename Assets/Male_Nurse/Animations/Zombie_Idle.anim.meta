@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ed22b65c817a63d4ebbd5ef4bf606386
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Animations/Zombie_Idle.anim
+  uploadId: 682499

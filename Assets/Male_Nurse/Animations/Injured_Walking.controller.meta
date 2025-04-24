@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fc32d8042bc946445895909cfedfd182
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Animations/Injured_Walking.controller
+  uploadId: 682499

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d2a52e0d69c149140af123dba0b1f05d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Prefabs/ClothType1_Animations/Male_Nurse_Cloth_Type1_Injured_Walking.prefab
+  uploadId: 682499

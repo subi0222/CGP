@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2629783ce7823df4a935eac664f92677
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Animations/Standard_Walk.controller
+  uploadId: 682499

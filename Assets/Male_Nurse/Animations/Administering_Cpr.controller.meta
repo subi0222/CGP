@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bde3be87e8cd77b4abb1ccee57136282
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Animations/Administering_Cpr.controller
+  uploadId: 682499

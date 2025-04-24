@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4a339c11e8844d841a47dcd1737c7b3d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Animations/Driving.controller
+  uploadId: 682499

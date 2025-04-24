@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3c20bbce80be35641938f962bf7b443c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Animations/Ascending_Stairs.controller
+  uploadId: 682499

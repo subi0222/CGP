@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0ddb539cc7c2cb3488654690e2fc171e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 292196
+  packageName: Male Nurse
+  packageVersion: Unity 2021.3.0f1
+  assetPath: Assets/Male_Nurse/Prefabs/ClothType1_Animations/Male_Nurse_Cloth_Type1_Administering_Cpr.prefab
+  uploadId: 682499
