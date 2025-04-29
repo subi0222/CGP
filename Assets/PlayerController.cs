@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    // 플레이어 시야 처리관련 새로 추가한 변수들 입니다.
+    public float viewRange = 15f;
+    public float viewAngle = 60f;
+    public LayerMask doctorMask; // ray가 의사한테만 맞는 레이어를 지정
+
     // Animator 관련 변수들입니다.
     private static readonly int Xspeed = Animator.StringToHash("Xspeed");
     private static readonly int Yspeed = Animator.StringToHash("Yspeed");
@@ -33,6 +38,9 @@ public class PlayerController : MonoBehaviour
         _movement.z = Input.GetAxis("Vertical") * moveSpeed;
         
         _rotation.y = Input.GetAxis("Mouse X") * mouseSpeed;
+
+        // 새로 추가한 시야 처리용 함수입니다.
+        CheckDoctorsInView();
     }
 
     private void FixedUpdate()
@@ -51,5 +59,39 @@ public class PlayerController : MonoBehaviour
         var dampedParam = Vector3.SmoothDamp(getParam, _movement, ref _v, St);
         anim.SetFloat(Xspeed, dampedParam.x);
         anim.SetFloat(Yspeed, dampedParam.z);
+    }
+
+    // 시야에 의사가 들어왔는지 처리하는 함수입니다.
+    void CheckDoctorsInView()
+    {
+        Collider[] doctorsInRange = Physics.OverlapSphere(transform.position, viewRange, doctorMask);
+
+        foreach (Collider doctorCollider in doctorsInRange)
+        {
+            DoctorMovement doctor = doctorCollider.GetComponent<DoctorMovement>();
+            if (doctor == null) continue;
+
+            Vector3 dirToDoctor = (doctor.transform.position - transform.position).normalized;
+            float angle = Vector3.Angle(transform.forward, dirToDoctor);
+
+            if (angle < viewAngle / 2f)
+            {
+                // 레이캐스트로 시야가 차단되어 있지않나 체크
+                Ray ray = new Ray(transform.position + Vector3.up, dirToDoctor);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, viewRange))
+                {
+                    if (hit.transform == doctorCollider.transform)
+                    {
+                        // 의사를 발견했다면 의사에게 「님 발견됨」 이라고 전달
+                        doctor.OnSpottedByPlayer();
+                        continue;
+                    }
+                }
+            }
+
+            // 의사가 보이지 않으면 의사에게 「님 않보임」 이라고 전달
+            doctor.OnNotSpottedByPlayer();
+        }
     }
 }
