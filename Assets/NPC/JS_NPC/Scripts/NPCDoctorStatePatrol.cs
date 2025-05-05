@@ -21,6 +21,8 @@ public class NPCDoctorStatePatrol : NPCIDoctorState
     {
         NPCDoctor = npc;
         agent = npc.GetComponent<NavMeshAgent>();
+        agent.isStopped = false;
+        agent.updatePosition = true; // 위치 업데이트를 활성화
         currentPatrolIndex = NPCDoctor.GetRandomPatriolPointIndex();
         nowPatrolPoint = NPCDoctor.GetPatrolPoint(currentPatrolIndex);
         if (nowPatrolPoint != null)
@@ -47,7 +49,7 @@ public class NPCDoctorStatePatrol : NPCIDoctorState
     {
         if (CanDetectPlayer())
         {
-            return new NPCDoctorStateGrabPlayer();
+            return new NPCDoctorStateFollowingPlayer();
         }
         if (getHearWistle)
         {

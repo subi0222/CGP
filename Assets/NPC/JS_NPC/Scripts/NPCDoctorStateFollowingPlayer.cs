@@ -16,12 +16,9 @@ public class NPCDoctorStateFollowingPlayer : NPCIDoctorState
         // Initialize the state when it is first entered
         agent = NPCDoctor.GetComponent<NavMeshAgent>();
         WhistleSound = NPCDoctor.GetComponent<AudioSource>();
-
-        Animator animator = NPCDoctor.GetAnimator();
-        if (animator != null)
-        {
-            animator.Play("Whistle");
-        }
+        agent.isStopped = false;
+        agent.updatePosition = true; // Enable position updates
+        HandleWhistleSound(); // Handle the whistle sound when entering this state
     }
 
     public void stateContinue()
@@ -84,7 +81,12 @@ public class NPCDoctorStateFollowingPlayer : NPCIDoctorState
         if (playerTransform != null)
         {
             float distanceToPlayer = Vector2.Distance(NPCDoctor.transform.position, playerTransform.position);
-            return distanceToPlayer <= NPCDoctor.GrabDistance;
+            if (distanceToPlayer <= NPCDoctor.GrabDistance)
+            {
+                // Debug line to visualize the grab distance
+                Debug.DrawLine(NPCDoctor.transform.position, playerTransform.position, Color.red, 1f);
+                return true; // Player is within grab distance
+            }
         }
         return false;
     }

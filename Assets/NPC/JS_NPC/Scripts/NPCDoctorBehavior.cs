@@ -44,6 +44,15 @@ public class NPCDoctorBehavior : MonoBehaviour
     // NPC를를 부는 소리
     public AudioClip WistleSoundClip;
 
+    // NPC가 갖고 있는 플래시 라이트트
+    public GameObject FlashLightPrefab;
+
+    // NPC가 갖고 있는 플래시 라이트트
+    private GameObject FlashLightInstance;
+
+    // NPC가 갖고 있는 플래시 라이트를 붙일 소켓
+    public Transform FlashLightAttachSocketTransform;
+
     // NPC의 애니메이터
     private Animator animator;
 
@@ -111,6 +120,9 @@ public class NPCDoctorBehavior : MonoBehaviour
     public void Start()
     {
         animator = GetComponent<Animator>();
+        FlashLightInstance = Instantiate(FlashLightPrefab, FlashLightAttachSocketTransform.position, FlashLightAttachSocketTransform.rotation, FlashLightAttachSocketTransform);
+        FlashLightInstance.transform.localPosition = new Vector3(0.1f, 0f, 0f); // 손에 맞게 조절
+        FlashLightInstance.transform.localRotation = Quaternion.Euler(0f, 0f, 90f); // 방향 조절
         currentState = new NPCDoctorStatePatrol(); // 초기 상태 설정
         currentState.stateInit(this); // 상태 초기화
     }
@@ -120,11 +132,13 @@ public class NPCDoctorBehavior : MonoBehaviour
     {
         if (currentState != null)
         {
+            Debug.Log(currentState.ToString()); // 현재 상태 출력
             NPCIDoctorState newState = currentState.canChangeState(); // 상태 변경 가능 여부 확인
             if (newState != null && newState != currentState)
             {
                 currentState = newState; // 상태 변경
                 currentState.stateInit(this); // 새로운 상태 초기화
+                Debug.Log("State changed to: " + currentState.ToString()); // 상태 변경 로그
             }
             else
             {

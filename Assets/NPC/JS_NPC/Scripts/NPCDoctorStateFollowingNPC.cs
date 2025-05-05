@@ -20,6 +20,9 @@ public class NPCDoctorStateFollowingNPC : NPCIDoctorState
                 break;
             }
         }
+        agent = npc.GetComponent<NavMeshAgent>();
+        agent.isStopped = false;
+        agent.updatePosition = true; // 위치 업데이트를 활성화
         if (TargetNPCDoctor != null)
         {
             agent.SetDestination(TargetNPCDoctor.transform.position);
@@ -76,13 +79,13 @@ public class NPCDoctorStateFollowingNPC : NPCIDoctorState
         {
             if (TargetNPCDoctor.GetCurrentState() is NPCDoctorStateFollowingPlayer)
             {
-                return true; // Target NPC is lost
+                return false; // Target NPC is lost
             }
             else if (TargetNPCDoctor.GetCurrentState() is NPCDoctorStateGrabPlayer)
             {
-                return true; // Target NPC is not lost
+                return false; // Target NPC is not lost
             }
         }
-        return false;
+        return true;
     }
 }
