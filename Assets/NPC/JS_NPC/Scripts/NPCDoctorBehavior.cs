@@ -121,8 +121,6 @@ public class NPCDoctorBehavior : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         FlashLightInstance = Instantiate(FlashLightPrefab, FlashLightAttachSocketTransform.position, FlashLightAttachSocketTransform.rotation, FlashLightAttachSocketTransform);
-        FlashLightInstance.transform.localPosition = new Vector3(0.1f, 0f, 0f); // 손에 맞게 조절
-        FlashLightInstance.transform.localRotation = Quaternion.Euler(0f, 0f, 90f); // 방향 조절
         currentState = new NPCDoctorStatePatrol(); // 초기 상태 설정
         currentState.stateInit(this); // 상태 초기화
     }

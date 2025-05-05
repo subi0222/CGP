@@ -15,7 +15,6 @@ public class NPCDoctorStateGrabPlayer : NPCIDoctorState
         Animator animator = NPCDoctor.GetAnimator();
         agent = npc.GetComponent<NavMeshAgent>();
         agent.isStopped = true; // NPC가 플레이어를 잡고 있는 동안 이동을 멈춤
-        agent.updatePosition = false; // 위치 업데이트를 비활성화
         agent.velocity = Vector3.zero; // 속도를 0으로 설정하여 이동을 멈춤
         agent.ResetPath(); // 경로를 초기화하여 NPC가 이동하지 않도록 함
         if (animator != null)
@@ -38,7 +37,6 @@ public class NPCDoctorStateGrabPlayer : NPCIDoctorState
         // 플레이어가 벗어낫는지 확인해야 할 듯하다.
         // NPC가 플레이어를 잡고 있는 동안 이동을 멈춤
         agent.isStopped = true;
-        agent.updatePosition = false;
         return;
     }
 
@@ -62,7 +60,6 @@ public class NPCDoctorStateGrabPlayer : NPCIDoctorState
             float distance = Vector2.Distance(NPCDoctor.transform.position, playerTransform.position);
             if (distance <= NPCDoctor.GrabDistance)
             {
-                Debug.DrawLine(NPCDoctor.transform.position, playerTransform.position, Color.green, 1f);
                 return true;
             }
         }
