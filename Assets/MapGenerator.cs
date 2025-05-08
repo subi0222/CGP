@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 
+[RequireComponent(typeof(NavMeshSurface))]
 public class MapGenerator : MonoBehaviour
 {
     [Header("Map Size")]
@@ -36,14 +39,36 @@ public class MapGenerator : MonoBehaviour
         public Vector3 size;
         public Vector3 pivotOffset;
     }
-
+    NavMeshSurface surface;
+    void Awake()
+    {
+        surface = GetComponent<NavMeshSurface>();
+        surface.collectObjects = CollectObjects.Children;
+        surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+        surface.layerMask = LayerMask.GetMask("Navigation");
+    }
     void Start()
     {
         map = new GameObject("Map").transform;
+        map.SetParent(transform, true);
 
         BuildFloor();
         MeasurePrefabs();
-        PlaceRooms();
+
+        bool valid = false;
+        while (!valid)
+        {
+            valid = PlaceRooms();
+            if (!valid)
+            {
+                for (int i = map.childCount - 1; i >= 0; i--){
+                    var obj = map.GetChild(i);
+                    if(obj.name != "MapFloor")
+                        DestroyImmediate(obj.gameObject);
+                }
+            }
+        }
+        surface.BuildNavMesh();
     }
 
     // 바닥 생성
@@ -57,6 +82,7 @@ public class MapGenerator : MonoBehaviour
 
         if (floorMaterial != null)
             floor.GetComponent<Renderer>().sharedMaterial = floorMaterial;
+        floor.isStatic = true;
     }
 
     //방 prefab 크기 측정
@@ -82,7 +108,7 @@ public class MapGenerator : MonoBehaviour
 
     //방 배치 - 모든 prefab 한번씩 사용 후 재사용 -> maxTry 횟수만큼 반복
     //prefab에 'Door_Frame'부분엔 벽 배치 안함 (출입구)
-    void PlaceRooms()
+    bool PlaceRooms()
     {
         var placedBounds = new List<Bounds>();
         var placedRooms = new List<(GameObject go, Transform[] doors)>();
@@ -95,6 +121,8 @@ public class MapGenerator : MonoBehaviour
 
         int emptyStreak = 0;
         int maxEmptyStreak = maxTry;
+
+        bool hasExamRoom = false;
 
         while (emptyStreak < maxEmptyStreak)
         {
@@ -137,6 +165,7 @@ public class MapGenerator : MonoBehaviour
                         floorR = go.GetComponentsInChildren<Renderer>(true);
                     float minY = floorR.Min(r => r.bounds.min.y);
                     go.transform.position += Vector3.up * (-minY + floor_Y_Axis);
+                    go.isStatic = true;
 
                     placedBounds.Add(CalcBounds(go));
 
@@ -160,10 +189,17 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
+        hasExamRoom = placedRooms.Any(pair => pair.go.name.StartsWith("ExamRoom"));
+
+        if (!hasExamRoom)
+            return false;
+
         foreach (var (go, doors) in placedRooms)
             CreateRoomWalls(go, doors);
 
         BuildOuterWalls();
+
+        return true;
     }
 
 
