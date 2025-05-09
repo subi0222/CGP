@@ -167,7 +167,7 @@ MonoBehaviour:
   X_Axis: 50
   Z_Axis: 50
   floorMaterial: {fileID: 2100000, guid: 71d53c85cd69f0f4582c68719ec6ccca, type: 2}
-  floor_Y_Axis: -0.1
+  floor_Y_Axis: 0.2
   wallMaterial: {fileID: 2100000, guid: c0309792d4d285a43aa9c221013ff3a6, type: 2}
   wallThickness: 0.2
   wallHeight: 3
