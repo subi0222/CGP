@@ -9,7 +9,7 @@ public class NPCDoctorMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -23,11 +23,20 @@ public class NPCDoctorMovement : MonoBehaviour
             Vector3 localDir = transform.InverseTransformDirection(velocity.normalized);
             animator.SetFloat("X", localDir.x, 0.1f, Time.deltaTime);
             animator.SetFloat("Y", localDir.z, 0.1f, Time.deltaTime);
+            Vector3 AgentVelocity = agent.velocity;
         }
         else // 정지 상태
         {
             animator.SetFloat("X", 0f, 0.1f, Time.deltaTime);
             animator.SetFloat("Y", 0f, 0.1f, Time.deltaTime);
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (agent != null && agent.isOnNavMesh)
+        {
+            transform.position = agent.nextPosition;
         }
     }
 }

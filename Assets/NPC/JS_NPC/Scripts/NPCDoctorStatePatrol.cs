@@ -22,7 +22,8 @@ public class NPCDoctorStatePatrol : NPCIDoctorState
         NPCDoctor = npc;
         agent = npc.GetComponent<NavMeshAgent>();
         agent.isStopped = false;
-        agent.updatePosition = true; // 위치 업데이트를 활성화
+        agent.updatePosition = true;
+        agent.updateRotation = true;
         currentPatrolIndex = NPCDoctor.GetRandomPatriolPointIndex();
         nowPatrolPoint = NPCDoctor.GetPatrolPoint(currentPatrolIndex);
         if (nowPatrolPoint != null)

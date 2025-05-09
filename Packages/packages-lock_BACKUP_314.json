@@ -9,6 +9,7 @@
       },
       "url": "https://packages.unity.com"
     },
+<<<<<<< HEAD
     "com.unity.bindings.openimageio": {
       "version": "1.0.0",
       "depth": 1,
@@ -28,6 +29,8 @@
       },
       "url": "https://packages.unity.com"
     },
+=======
+>>>>>>> origin/map
     "com.unity.collab-proxy": {
       "version": "2.7.1",
       "depth": 0,
