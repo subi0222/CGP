@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (Collider doctorCollider in doctorsInRange)
         {
-            DoctorMovement doctor = doctorCollider.GetComponent<DoctorMovement>();
+            NPCDoctorMovement doctor = doctorCollider.GetComponent<NPCDoctorMovement>();
             if (doctor == null) continue;
 
             Vector3 dirToDoctor = (doctor.transform.position - transform.position).normalized;

@@ -11,6 +11,7 @@ public class DoctorMovement : MonoBehaviour
 
     private bool hasBeenSpotted = false; // 한 번이라도 플레이어에게 보였나
     private bool isSeenByPlayer = false; // 현재 보여지고 있나
+    private Animator animator;
     private Vector3 lastKnownPlayerPosition;
 
     // 다른 의사와 공유 정보
@@ -19,6 +20,7 @@ public class DoctorMovement : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         if (agent == null)
         {
             agent = GetComponent<NavMeshAgent>();
