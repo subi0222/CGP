@@ -1,17 +1,26 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+//UI 관련 스크립트입니다.
 public class UIManagerScript : MonoBehaviour
 {
     public GameObject qteUI;
     public Slider qteSlider;
+
+    public GameObject deathUI;
     
     private void Start()
     {
         qteUI.gameObject.SetActive(false);
+        deathUI.gameObject.SetActive(false);
     }
 
-    public void SetQteSlider(bool enable)
+    public void SetDeathUI(bool enable)
+    {
+        deathUI.gameObject.SetActive(enable);
+    }
+
+    public void SetQteUI(bool enable)
     {
         qteUI.gameObject.SetActive(enable);
     }

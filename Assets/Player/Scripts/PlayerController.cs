@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//이동 및 중앙 관리 스크립트입니다.
 public class PlayerController : MonoBehaviour
 {
     // 플레이어 시야 처리관련 새로 추가한 변수들 입니다.
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public PlayerInteraction playerInteraction;
     public PlayerAnimation playerAnimation;
+    public PlayerCameraBehaviourScript playerCamera;
     
     private Vector3 _movement;
     private Vector3 _rotation;
@@ -28,6 +30,7 @@ public class PlayerController : MonoBehaviour
     
     private void Update()
     {
+        
         // 새로 추가한 시야 처리용 함수입니다.
         CheckDoctorsInView();
 
@@ -38,7 +41,7 @@ public class PlayerController : MonoBehaviour
         _movement.x = Input.GetAxis("Horizontal") * moveSpeed;
         _movement.z = Input.GetAxis("Vertical") * moveSpeed;
         
-        _rotation.y = Input.GetAxis("Mouse X") * mouseSpeed;
+        //_rotation.y = Input.GetAxis("Mouse X") * mouseSpeed;
     }
     
     private void FixedUpdate()
@@ -48,9 +51,24 @@ public class PlayerController : MonoBehaviour
         playerAnimation.Moving(_movement);
         _movement = rb.transform.TransformDirection(_movement);
         rb.MovePosition(rb.position + _movement * Time.fixedDeltaTime);
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(_rotation));
+        //rb.MoveRotation(rb.rotation * Quaternion.Euler(_rotation));
+    }
+    
+    public bool IsDoctorInTrigger(Collider collider)
+    {
+        if (collider.gameObject.name != "NPC") return false;
+        var dist = Vector2.Distance(this.transform.position, collider.gameObject.transform.position);
+        var npc = collider.gameObject.GetComponent<NPCDoctorBehavior>();
+        return dist <= npc.GrabDistance;
     }
 
+    public void SetGrabbed(GameObject obj)
+    {
+        var doctor = obj.gameObject.GetComponent<NPCDoctorBehavior>();
+        playerCamera.setDoctorPos(doctor.GetHeadPosition());
+        playerInteraction.IdleToAttacked();
+    }
+    
     // 시야에 의사가 들어왔는지 처리하는 함수입니다.
     void CheckDoctorsInView()
     {
