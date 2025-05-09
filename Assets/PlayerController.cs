@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -21,22 +22,28 @@ public class PlayerController : MonoBehaviour
     public float mouseSpeed = 20f;
     public Rigidbody rb;
     public Animator anim;
-    
+
     private Vector3 _movement;
     private Vector3 _rotation;
+
+    private BoxCollider _boxCollider;
+
+    private List<GameObject> GrabbingDoctors = new List<GameObject>();
+
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        _boxCollider = GetComponent<BoxCollider>();
     }
-    
+
     private void Update()
     {
         moveSpeed = Mathf.SmoothDamp(moveSpeed, Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed, ref _sv, St);
 
         _movement.x = Input.GetAxis("Horizontal") * moveSpeed;
         _movement.z = Input.GetAxis("Vertical") * moveSpeed;
-        
+
         _rotation.y = Input.GetAxis("Mouse X") * mouseSpeed;
 
         // 새로 추가한 시야 처리용 함수입니다.
@@ -93,5 +100,32 @@ public class PlayerController : MonoBehaviour
             // 의사가 보이지 않으면 의사에게 「님 않보임」 이라고 전달
             doctor.OnNotSpottedByPlayer();
         }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Doctor"))
+        {
+            GrabbingDoctors.Add(other.gameObject);
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Doctor"))
+        {
+            GrabbingDoctors.Remove(other.gameObject);
+        }
+    }
+
+    public bool IsDoctorInTrigger(Collider other)
+    {
+        if (GrabbingDoctors == null) return false;
+        return GrabbingDoctors.Contains(other.gameObject);
+    }
+
+    public void SetGrabbed()
+    {
+        rb.constraints = RigidbodyConstraints.FreezeAll;
     }
 }

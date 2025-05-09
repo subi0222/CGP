@@ -59,6 +59,13 @@ public class NPCDoctorBehavior : MonoBehaviour
     // NPC의 상태를 관리하는 인터페이스
     private NPCIDoctorState currentState;
 
+    private GameObject NPCDoctor;
+
+    public GameObject GetNPCDoctor()
+    {
+        return NPCDoctor;
+    }
+
     public void PlayWhistleSound()
     {
         if (currentState is NPCDoctorStateFollowingPlayer followingState)
@@ -119,7 +126,7 @@ public class NPCDoctorBehavior : MonoBehaviour
     // 게임 첫 시작시 호출되는 함수
     public void Start()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         FlashLightInstance = Instantiate(FlashLightPrefab, FlashLightAttachSocketTransform.position, FlashLightAttachSocketTransform.rotation, FlashLightAttachSocketTransform);
         currentState = new NPCDoctorStatePatrol(); // 초기 상태 설정
         currentState.stateInit(this); // 상태 초기화

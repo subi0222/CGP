@@ -14,7 +14,7 @@ public class NPCDoctorStateFollowingNPC : NPCIDoctorState
         NPCDoctor = npc;
         foreach (NPCDoctorBehavior Doctor in NPCDoctorBehavior.AllDoctors)
         {
-            if (Doctor != TargetNPCDoctor && Doctor.GetCurrentState() is NPCDoctorStatePatrol)
+            if (Doctor.GetCurrentState() is NPCDoctorStateFollowingPlayer or NPCDoctorStateGrabPlayer)
             {
                 TargetNPCDoctor = Doctor;
                 break;
@@ -22,7 +22,6 @@ public class NPCDoctorStateFollowingNPC : NPCIDoctorState
         }
         agent = npc.GetComponent<NavMeshAgent>();
         agent.isStopped = false;
-        agent.updatePosition = true; // 위치 업데이트를 활성화
         if (TargetNPCDoctor != null)
         {
             agent.SetDestination(TargetNPCDoctor.transform.position);
@@ -31,7 +30,7 @@ public class NPCDoctorStateFollowingNPC : NPCIDoctorState
 
     public void stateContinue()
     {
-        if (!agent.pathPending && agent.remainingDistance >= 0.6f)
+        if (!agent.pathPending && agent.remainingDistance >= 0.1f)
         {
             agent.SetDestination(TargetNPCDoctor.transform.position);
         }
@@ -57,13 +56,13 @@ public class NPCDoctorStateFollowingNPC : NPCIDoctorState
             return false;
         else
         {
-            Vector3 directionToPlayer = playerTransform.position - TargetNPCDoctor.transform.position;
+            Vector2 directionToPlayer = playerTransform.position - NPCDoctor.transform.position;
             float distanceToPlayer = directionToPlayer.magnitude;
 
             // Check if the player is within detection distance and angle
             if (distanceToPlayer <= NPCDoctor.DetectionDistance)
             {
-                float angleToPlayer = Vector2.Angle(TargetNPCDoctor.transform.forward, directionToPlayer.normalized);
+                float angleToPlayer = Vector2.Angle(NPCDoctor.transform.forward, directionToPlayer.normalized);
                 if (angleToPlayer <= NPCDoctor.DetectionAngle / 2f)
                 {
                     return true;
