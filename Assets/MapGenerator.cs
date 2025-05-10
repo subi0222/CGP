@@ -35,6 +35,9 @@ public class MapGenerator : MonoBehaviour
     public GameObject exitPrefab;
     public float minExitDistance = 15f;
 
+    [Header("Player")]
+    public GameObject playerPrefab;
+
     Transform map;
     List<RoomInfo> infos = new List<RoomInfo>();
 
@@ -60,20 +63,34 @@ public class MapGenerator : MonoBehaviour
         BuildFloor();
         MeasurePrefabs();
 
+        GameObject examRoomObj = null;
         bool valid = false;
+
         while (!valid)
         {
-            valid = PlaceRooms();
+
+            valid = PlaceRooms(out examRoomObj);
             if (!valid)
             {
-                for (int i = map.childCount - 1; i >= 0; i--){
+                for (int i = map.childCount - 1; i >= 0; i--)
+                {
                     var obj = map.GetChild(i);
-                    if(obj.name != "MapFloor")
+                    if (obj.name != "MapFloor")
                         DestroyImmediate(obj.gameObject);
                 }
             }
         }
         surface.BuildNavMesh();
+
+        if (playerPrefab != null && examRoomObj != null)
+        {
+            var bounds = CalcBounds(examRoomObj);
+            float y = bounds.min.y + 0.1f;
+            Vector3 spawnPoint = new Vector3(bounds.center.x, y, bounds.center.z);
+
+            GameObject player = Instantiate(playerPrefab, spawnPoint, Quaternion.identity);
+            player.name = "Player";
+        }
     }
 
     // 바닥 생성
@@ -113,7 +130,7 @@ public class MapGenerator : MonoBehaviour
 
     //방 배치 - 모든 prefab 한번씩 사용 후 재사용 -> maxTry 횟수만큼 반복
     //prefab에 'Door_Frame'부분엔 벽 배치 안함 (출입구)
-    bool PlaceRooms()
+    bool PlaceRooms(out GameObject examRoomObj)
     {
         var placedBounds = new List<Bounds>();
         var placedRooms = new List<(GameObject obj, Transform[] doors)>();
@@ -122,13 +139,15 @@ public class MapGenerator : MonoBehaviour
         System.Random rnd = new System.Random();
         unused = unused.OrderBy(_ => rnd.Next()).ToList();
 
-        var reuse = infos;
+        var reuse = infos
+                    .Where(info => info.prefab != examRoomPrefab)
+                    .ToList();
 
         int emptyStreak = 0;
         int maxEmptyStreak = maxTry;
 
         bool hasExamRoom = false;
-        GameObject examRoomObj = null;
+        examRoomObj = null;
 
         while (emptyStreak < maxEmptyStreak)
         {
@@ -155,7 +174,7 @@ public class MapGenerator : MonoBehaviour
 
                 var testB = new Bounds(
                     new Vector3(x, 0, z),
-                    new Vector3(info.size.x + innerMargin,info.size.y,info.size.z + innerMargin)
+                    new Vector3(info.size.x + innerMargin, info.size.y, info.size.z + innerMargin)
                 );
 
                 if (!placedBounds.Any(b => b.Intersects(testB)))
@@ -175,7 +194,7 @@ public class MapGenerator : MonoBehaviour
 
                     bool isExam = (examRoomPrefab != null && info.prefab == examRoomPrefab) || obj.name.ToLower().Contains("examroom");
 
-                    if(isExam) examRoomObj = obj;
+                    if (isExam) examRoomObj = obj;
 
                     placedBounds.Add(CalcBounds(obj));
 
@@ -306,14 +325,14 @@ public class MapGenerator : MonoBehaviour
     void MakeExit(GameObject examRoom, List<(GameObject obj, Transform[] doors)> rooms)
     {
         Vector3 examCenter = CalcBounds(examRoom).center;
-        
+
         var sel = rooms
             .Where(room => room.obj != examRoom)
             .Select(room => (room.obj, center: CalcBounds(room.obj).center))
             .Where(tar => Vector3.Distance(tar.center, examCenter) >= minExitDistance)
             .ToList();
 
-        if(sel.Count == 0)
+        if (sel.Count == 0)
         {
             sel = rooms
                 .Where(room => room.obj != examRoom)

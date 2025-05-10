@@ -174,9 +174,7 @@ MonoBehaviour:
   roomPrefabs:
   - {fileID: 8044628714702267998, guid: eb99ce9f8fe075f4e8644af36a31f5a4, type: 3}
   - {fileID: 3314277126500927383, guid: 295ba75cc5a7a9a4b83713a9060f4dad, type: 3}
-  - {fileID: 3558299530482950528, guid: 8f0d6da7d64e9964f8baf5e41064918a, type: 3}
   - {fileID: 7517859542408953283, guid: a109212b99d0c4242921fcc9160ef818, type: 3}
-  - {fileID: 7670578397933188366, guid: ab9367e4774904f4ba5c4b7b4ea068d5, type: 3}
   - {fileID: 8056643679611337353, guid: 1f84fdcdbcf94ae469b841379091feaf, type: 3}
   - {fileID: 2033776717970265391, guid: b3681db2161354f4ba0bbdcd450b5ee0, type: 3}
   - {fileID: 1182214317519464661, guid: 85fcd98aaa5f0b2438a7ca1c7c87b3ab, type: 3}
@@ -192,6 +190,7 @@ MonoBehaviour:
   maxTry: 200
   exitPrefab: {fileID: 7753838507447472841, guid: 9946ef8839b9d4b438e6dd02d31afb90, type: 3}
   minExitDistance: 40
+  playerPrefab: {fileID: 8388197307409558617, guid: 293db3cd0c2549246be31543de443b70, type: 3}
 --- !u!114 &18178276
 MonoBehaviour:
   m_ObjectHideFlags: 0
