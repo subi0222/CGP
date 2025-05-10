@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
         if (collider.gameObject.name != "NPC") return false;
         var dist = Vector2.Distance(this.transform.position, collider.gameObject.transform.position);
         var npc = collider.gameObject.GetComponent<NPCDoctorBehavior>();
+        Debug.Log("Caught - Distance: " + dist);
         return dist <= npc.GrabDistance;
     }
 
