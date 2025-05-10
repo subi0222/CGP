@@ -167,7 +167,7 @@ MonoBehaviour:
   X_Axis: 50
   Z_Axis: 50
   floorMaterial: {fileID: 2100000, guid: 71d53c85cd69f0f4582c68719ec6ccca, type: 2}
-  floor_Y_Axis: -0.1
+  floor_Y_Axis: 0.2
   wallMaterial: {fileID: 2100000, guid: c0309792d4d285a43aa9c221013ff3a6, type: 2}
   wallThickness: 0.2
   wallHeight: 3
@@ -186,9 +186,12 @@ MonoBehaviour:
   - {fileID: 2420473143639103117, guid: 923401b7c29587648805a3efa0a6010f, type: 3}
   - {fileID: 7933835649268143794, guid: c8465a3aa72da404fba0ca2deea7f4ef, type: 3}
   - {fileID: 7328853967993382529, guid: 50cdbf598b9a94640883e587c3ee2efd, type: 3}
+  examRoomPrefab: {fileID: 7517859542408953283, guid: a109212b99d0c4242921fcc9160ef818, type: 3}
   innerMargin: 1
   outerMargin: 2
   maxTry: 200
+  exitPrefab: {fileID: 7753838507447472841, guid: 9946ef8839b9d4b438e6dd02d31afb90, type: 3}
+  minExitDistance: 40
 --- !u!114 &18178276
 MonoBehaviour:
   m_ObjectHideFlags: 0

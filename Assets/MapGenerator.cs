@@ -24,11 +24,16 @@ public class MapGenerator : MonoBehaviour
 
     [Header("Room Prefabs")]
     public List<GameObject> roomPrefabs;
+    public GameObject examRoomPrefab;
 
     [Header("Placement Settings")]
     public float innerMargin = 2f;
     public float outerMargin = 3f;
     public int maxTry = 200;
+
+    [Header("Exit")]
+    public GameObject exitPrefab;
+    public float minExitDistance = 15f;
 
     Transform map;
     List<RoomInfo> infos = new List<RoomInfo>();
@@ -111,7 +116,7 @@ public class MapGenerator : MonoBehaviour
     bool PlaceRooms()
     {
         var placedBounds = new List<Bounds>();
-        var placedRooms = new List<(GameObject go, Transform[] doors)>();
+        var placedRooms = new List<(GameObject obj, Transform[] doors)>();
 
         var unused = infos.ToList();
         System.Random rnd = new System.Random();
@@ -123,6 +128,7 @@ public class MapGenerator : MonoBehaviour
         int maxEmptyStreak = maxTry;
 
         bool hasExamRoom = false;
+        GameObject examRoomObj = null;
 
         while (emptyStreak < maxEmptyStreak)
         {
@@ -154,25 +160,29 @@ public class MapGenerator : MonoBehaviour
 
                 if (!placedBounds.Any(b => b.Intersects(testB)))
                 {
-                    var go = Instantiate(info.prefab, map);
-                    go.transform.localScale = info.prefab.transform.localScale;
-                    go.transform.position = new Vector3(x, 0, z) - info.pivotOffset;
+                    var obj = Instantiate(info.prefab, map);
+                    obj.transform.localScale = info.prefab.transform.localScale;
+                    obj.transform.position = new Vector3(x, 0, z) - info.pivotOffset;
 
-                    var floorR = go.GetComponentsInChildren<Renderer>(true)
+                    var floorR = obj.GetComponentsInChildren<Renderer>(true)
                                    .Where(r => r.gameObject.name.ToLower().Contains("floor"))
                                    .ToArray();
                     if (floorR.Length == 0)
-                        floorR = go.GetComponentsInChildren<Renderer>(true);
+                        floorR = obj.GetComponentsInChildren<Renderer>(true);
                     float minY = floorR.Min(r => r.bounds.min.y);
-                    go.transform.position += Vector3.up * (-minY + floor_Y_Axis);
-                    go.isStatic = true;
+                    obj.transform.position += Vector3.up * (-minY + floor_Y_Axis);
+                    obj.isStatic = true;
 
-                    placedBounds.Add(CalcBounds(go));
+                    bool isExam = (examRoomPrefab != null && info.prefab == examRoomPrefab) || obj.name.ToLower().Contains("examroom");
 
-                    var doors = go.GetComponentsInChildren<Transform>(true)
+                    if(isExam) examRoomObj = obj;
+
+                    placedBounds.Add(CalcBounds(obj));
+
+                    var doors = obj.GetComponentsInChildren<Transform>(true)
                                   .Where(t => t.name == "Door_Frame")
                                   .ToArray();
-                    placedRooms.Add((go, doors));
+                    placedRooms.Add((obj, doors));
 
                     placed = true;
                     break;
@@ -189,7 +199,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        hasExamRoom = placedRooms.Any(pair => pair.go.name.StartsWith("ExamRoom"));
+        hasExamRoom = placedRooms.Any(pair => pair.obj.name.StartsWith("ExamRoom"));
 
         if (!hasExamRoom)
             return false;
@@ -198,6 +208,8 @@ public class MapGenerator : MonoBehaviour
             CreateRoomWalls(go, doors);
 
         BuildOuterWalls();
+
+        MakeExit(examRoomObj, placedRooms);
 
         return true;
     }
@@ -288,6 +300,37 @@ public class MapGenerator : MonoBehaviour
         SpawnWall(0, -hz - t * .5f, X_Axis, true);
         SpawnWall(0, hx + t * .5f, Z_Axis, false);
         SpawnWall(0, -hx - t * .5f, Z_Axis, false);
+    }
+
+    //출구 생성 - Exam Room을 기준으로 일정 거리 이상에서 생성
+    void MakeExit(GameObject examRoom, List<(GameObject obj, Transform[] doors)> rooms)
+    {
+        Vector3 examCenter = CalcBounds(examRoom).center;
+        
+        var sel = rooms
+            .Where(room => room.obj != examRoom)
+            .Select(room => (room.obj, center: CalcBounds(room.obj).center))
+            .Where(tar => Vector3.Distance(tar.center, examCenter) >= minExitDistance)
+            .ToList();
+
+        if(sel.Count == 0)
+        {
+            sel = rooms
+                .Where(room => room.obj != examRoom)
+                .Select(room => (room.obj, center: CalcBounds(room.obj).center))
+                .OrderByDescending(tar => Vector3.Distance(tar.center, examCenter))
+                .Take(1)
+                .ToList();
+        }
+
+        var target = sel[Random.Range(0, sel.Count)];
+
+        var targetBounds = CalcBounds(target.obj);
+        Vector3 spawnPos = new Vector3(target.center.x, floor_Y_Axis, target.center.z);
+
+        var exit = Instantiate(exitPrefab, spawnPos, Quaternion.identity, map);
+        exit.name = "Exit";
+        exit.isStatic = true;
     }
 
     // 경계 계산
