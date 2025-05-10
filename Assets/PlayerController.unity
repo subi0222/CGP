@@ -342,6 +342,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15dc2c88ed14523419608120719a4da9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1398206969}
+  rb: {fileID: 1398206971}
+  playerInteraction: {fileID: 0}
   mouseSpeed: 5
   maxDegree: 275
   minDegree: 50
@@ -875,12 +878,9 @@ MonoBehaviour:
   runSpeed: 5
   mouseSpeed: 20
   rb: {fileID: 1398206971}
-  anim: {fileID: 1398206973}
---- !u!95 &1398206973 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7869543608362826461, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
-  m_PrefabInstance: {fileID: 637405609}
-  m_PrefabAsset: {fileID: 0}
+  playerInteraction: {fileID: 0}
+  playerAnimation: {fileID: 0}
+  playerCamera: {fileID: 503031951}
 --- !u!4 &1398206974 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4311652260893728935, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
@@ -1415,7 +1415,7 @@ PrefabInstance:
     - target: {fileID: 8441650239521334304, guid: 2472c420317e2dc4a852433da6d505ed, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 1398206974}
+      objectReference: {fileID: 0}
     - target: {fileID: 8441650239521334304, guid: 2472c420317e2dc4a852433da6d505ed, type: 3}
       propertyPath: playerMask.m_Bits
       value: 128
@@ -1451,7 +1451,7 @@ PrefabInstance:
     - target: {fileID: 8946739316910090697, guid: 2472c420317e2dc4a852433da6d505ed, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 1398206974}
+      objectReference: {fileID: 0}
     - target: {fileID: 8946739316910090697, guid: 2472c420317e2dc4a852433da6d505ed, type: 3}
       propertyPath: DetectionAngle
       value: 100
