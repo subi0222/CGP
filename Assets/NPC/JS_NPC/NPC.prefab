@@ -51,13 +51,16 @@ MonoBehaviour:
   DetectionDistance: 5
   HearingDistance: 10
   DetectionAngle: 100
-  GrabDistance: 0.6
+  GrabDistance: 1
   patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   WistleSoundClip: {fileID: 0}
   FlashLightPrefab: {fileID: 1002705123656268, guid: d86ca2f4159e6a942abd8dfc52b38395, type: 3}
   FlashLightAttachSocketTransform: {fileID: 6591977201858118464}
+  Head: {fileID: 2780502102522170709}
 --- !u!195 &8646338181327093941
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -221,6 +224,11 @@ PrefabInstance:
 --- !u!4 &1822975609008670568 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1070232985009656329, guid: d9e5dcb4ddf530a45b1f18c7d156f526, type: 3}
+  m_PrefabInstance: {fileID: 7523622087886252703}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2780502102522170709 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5692292108060305354, guid: d9e5dcb4ddf530a45b1f18c7d156f526, type: 3}
   m_PrefabInstance: {fileID: 7523622087886252703}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8062568202812738932 stripped

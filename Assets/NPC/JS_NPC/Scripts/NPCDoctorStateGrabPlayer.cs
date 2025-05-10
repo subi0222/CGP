@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class NPCDoctorStateGrabPlayer : NPCIDoctorState
 {
+    
     private NPCDoctorBehavior NPCDoctorBehavior;
 
     private NavMeshAgent agent;
@@ -32,7 +33,8 @@ public class NPCDoctorStateGrabPlayer : NPCIDoctorState
             PlayerController playerController = Player.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                playerController.SetGrabbed();
+                // *수정: 잡은 의사의 정보를 넘겨주도록 수정했습니다.
+                playerController.SetGrabbed(NPCDoctorBehavior.gameObject);
             }
         }
     }

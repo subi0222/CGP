@@ -61,6 +61,15 @@ public class NPCDoctorBehavior : MonoBehaviour
 
     private GameObject NPCDoctor;
 
+    // *추가: NPC의 머리입니다.
+    public GameObject Head;
+
+    // *추가: NPC의 머리 좌표를 반환합니다.
+    public Vector3 GetHeadPosition()
+    {
+        return Head.transform.position;
+    }
+
     public GameObject GetNPCDoctor()
     {
         return NPCDoctor;
