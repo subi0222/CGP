@@ -23,11 +23,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 _movement;
     private Vector3 _rotation;
     
-    private void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-    
     private void Update()
     {
         

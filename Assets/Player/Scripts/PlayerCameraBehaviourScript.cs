@@ -13,6 +13,11 @@ public class PlayerCameraBehaviourScript : MonoBehaviour
     private Vector3 _rotation;
     private Vector3 _doctorPos;
     
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    
     private void Update()
     {
         if (playerInteraction.isAttacked())
