@@ -55,7 +55,11 @@ public class NPCDoctorStateGrabPlayer : NPCIDoctorState
             return this; // 현재 상태를 유지
         }
         else
-        {
+        {   
+            // grabbing player -> blend tree 이동을 위한 코드 추가
+            Animator animator = NPCDoctorBehavior.GetAnimator();
+            animator.SetBool("GrabPlayer", false);
+            // 여기까지 삽입
             return new NPCDoctorStateFollowingPlayer(); // 플레이어를 추적하는 상태로 전환
         }
     }

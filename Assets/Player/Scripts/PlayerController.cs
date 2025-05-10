@@ -47,7 +47,8 @@ public class PlayerController : MonoBehaviour
     
     public bool IsDoctorInTrigger(Collider collider)
     {
-        if (collider.gameObject.name != "NPC") return false;
+        // name != "npc" 를 tag != "Doctor"로 변경
+        if (collider.gameObject.tag != "Doctor") return false;
         var dist = Vector2.Distance(this.transform.position, collider.gameObject.transform.position);
         var npc = collider.gameObject.GetComponent<NPCDoctorBehavior>();
         Debug.Log("Caught - Distance: " + dist);
@@ -68,7 +69,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (Collider doctorCollider in doctorsInRange)
         {
-            DoctorMovement doctor = doctorCollider.GetComponent<DoctorMovement>();
+            NPCDoctorMovement doctor = doctorCollider.GetComponent<NPCDoctorMovement>();
             if (doctor == null) continue;
 
             Vector3 dirToDoctor = (doctor.transform.position - transform.position).normalized;
