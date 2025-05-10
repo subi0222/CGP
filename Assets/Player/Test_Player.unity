@@ -260,6 +260,14 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 4040741392070446209}
+    - target: {fileID: 6813515094880172761, guid: 293db3cd0c2549246be31543de443b70, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6813515094880172761, guid: 293db3cd0c2549246be31543de443b70, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8388197307409558617, guid: 293db3cd0c2549246be31543de443b70, type: 3}
       propertyPath: m_Name
       value: Player_Demo

@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     public PlayerCameraBehaviourScript playerCamera;
     
     private Vector3 _movement;
-    private Vector3 _rotation;
     
     private void Update()
     {
@@ -35,8 +34,6 @@ public class PlayerController : MonoBehaviour
 
         _movement.x = Input.GetAxis("Horizontal") * moveSpeed;
         _movement.z = Input.GetAxis("Vertical") * moveSpeed;
-        
-        //_rotation.y = Input.GetAxis("Mouse X") * mouseSpeed;
     }
     
     private void FixedUpdate()
@@ -46,7 +43,6 @@ public class PlayerController : MonoBehaviour
         playerAnimation.Moving(_movement);
         _movement = rb.transform.TransformDirection(_movement);
         rb.MovePosition(rb.position + _movement * Time.fixedDeltaTime);
-        //rb.MoveRotation(rb.rotation * Quaternion.Euler(_rotation));
     }
     
     public bool IsDoctorInTrigger(Collider collider)
