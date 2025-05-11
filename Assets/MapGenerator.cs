@@ -47,13 +47,19 @@ public class MapGenerator : MonoBehaviour
         public Vector3 size;
         public Vector3 pivotOffset;
     }
+
     NavMeshSurface surface;
+    const string NavLayerName = "Navigation";
+    int navLayer = -1;
+
     void Awake()
     {
         surface = GetComponent<NavMeshSurface>();
+        surface.layerMask = LayerMask.GetMask(NavLayerName);
         surface.collectObjects = CollectObjects.Children;
         surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
-        surface.layerMask = LayerMask.GetMask("Navigation");
+
+        navLayer = LayerMask.NameToLayer(NavLayerName);
     }
     void Start()
     {
@@ -97,6 +103,7 @@ public class MapGenerator : MonoBehaviour
     void BuildFloor()
     {
         var floor = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        floor.layer = navLayer;
         floor.name = "MapFloor";
         floor.transform.SetParent(map, true);
         floor.transform.localScale = new Vector3(X_Axis / 10f, 1, Z_Axis / 10f);
@@ -180,6 +187,7 @@ public class MapGenerator : MonoBehaviour
                 if (!placedBounds.Any(b => b.Intersects(testB)))
                 {
                     var obj = Instantiate(info.prefab, map);
+                    SetLayerRecursively(obj, navLayer);
                     obj.transform.localScale = info.prefab.transform.localScale;
                     obj.transform.position = new Vector3(x, 0, z) - info.pivotOffset;
 
@@ -223,8 +231,8 @@ public class MapGenerator : MonoBehaviour
         if (!hasExamRoom)
             return false;
 
-        foreach (var (go, doors) in placedRooms)
-            CreateRoomWalls(go, doors);
+        foreach (var (obj, doors) in placedRooms)
+            CreateRoomWalls(obj, doors);
 
         BuildOuterWalls();
 
@@ -299,13 +307,14 @@ public class MapGenerator : MonoBehaviour
             scale = new Vector3(wallThickness, wallHeight, length);
         }
 
-        var w = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        w.name = "InnerWall";
-        w.transform.SetParent(map, true);
-        w.transform.position = pos;
-        w.transform.localScale = scale;
+        var wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wall.layer = navLayer;
+        wall.name = "InnerWall";
+        wall.transform.SetParent(map, true);
+        wall.transform.position = pos;
+        wall.transform.localScale = scale;
         if (wallMaterial != null)
-            w.GetComponent<Renderer>().sharedMaterial = wallMaterial;
+            wall.GetComponent<Renderer>().sharedMaterial = wallMaterial;
     }
 
     // 외벽 생성
@@ -313,12 +322,12 @@ public class MapGenerator : MonoBehaviour
     {
         float hx = X_Axis * .5f;
         float hz = Z_Axis * .5f;
-        float t = wallThickness;
+        float thick = wallThickness;
 
-        SpawnWall(0, hz + t * .5f, X_Axis, true);
-        SpawnWall(0, -hz - t * .5f, X_Axis, true);
-        SpawnWall(0, hx + t * .5f, Z_Axis, false);
-        SpawnWall(0, -hx - t * .5f, Z_Axis, false);
+        SpawnWall(0, hz + thick * .5f, X_Axis, true);
+        SpawnWall(0, -hz - thick * .5f, X_Axis, true);
+        SpawnWall(0, hx + thick * .5f, Z_Axis, false);
+        SpawnWall(0, -hx - thick * .5f, Z_Axis, false);
     }
 
     //출구 생성 - Exam Room을 기준으로 일정 거리 이상에서 생성
@@ -352,10 +361,17 @@ public class MapGenerator : MonoBehaviour
         exit.isStatic = true;
     }
 
-    // 경계 계산
-    Bounds CalcBounds(GameObject go)
+    // 방 생성마다 layer Navigation으로 설정
+    void SetLayerRecursively(GameObject obj, int layer)
     {
-        var rends = go.GetComponentsInChildren<Renderer>(true);
+        obj.layer = layer;
+        foreach (Transform c in obj.transform) SetLayerRecursively(c.gameObject, layer);
+    }
+
+    // 경계 계산
+    Bounds CalcBounds(GameObject obj)
+    {
+        var rends = obj.GetComponentsInChildren<Renderer>(true);
         Bounds b = rends[0].bounds;
         foreach (var r in rends) b.Encapsulate(r.bounds);
         return b;
