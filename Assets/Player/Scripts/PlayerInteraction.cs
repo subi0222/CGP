@@ -21,6 +21,11 @@ public class PlayerInteraction : MonoBehaviour
 
     private State _state = State.Idle;
 
+    private void Start()
+    {
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManagerScript>();
+    }
+    
     private void Update()
     {
         switch (_state)
