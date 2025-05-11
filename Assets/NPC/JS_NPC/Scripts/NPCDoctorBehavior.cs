@@ -36,7 +36,7 @@ public class NPCDoctorBehavior : MonoBehaviour
     public float DetectionAngle = 30f;
 
     // NPC가 잡을 수 있는 거리
-    public float GrabDistance = 0.6f;
+    public float GrabDistance = 1.2f;
 
     // NPC의 탐색 포인트
     public List<Transform> PatrolPoints = new List<Transform>();
