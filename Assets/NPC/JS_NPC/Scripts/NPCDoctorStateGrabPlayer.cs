@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 public class NPCDoctorStateGrabPlayer : NPCIDoctorState
 {
-    
+
     private NPCDoctorBehavior NPCDoctorBehavior;
 
     private NavMeshAgent agent;
@@ -56,22 +56,18 @@ public class NPCDoctorStateGrabPlayer : NPCIDoctorState
         }
         else
         {
+            // grabbing player -> blend tree 이동을 위한 코드 추가
+            Animator animator = NPCDoctorBehavior.GetAnimator();
+            animator.SetBool("GrabPlayer", false);
+            // 여기까지 삽입
             return new NPCDoctorStateFollowingPlayer(); // 플레이어를 추적하는 상태로 전환
         }
     }
 
     bool CanGrabPlayer()
     {
-        return NPCDoctorBehavior.GetPlayer().GetComponent<PlayerController>().IsDoctorInTrigger(NPCDoctorBehavior.GetComponent<Collider>());
-        // Transform playerTransform = NPCDoctorBehavior.GetPlayerTransform();
-        // if (playerTransform != null)
-        // {
-        //     float distance = Vector2.Distance(NPCDoctor.transform.position, playerTransform.position);
-        //     if (distance <= NPCDoctor.GrabDistance)
-        //     {
-        //         return true;
-        //     }
-        // }
-        // return false;
+        Vector3 directionToPlayer = NPCDoctorBehavior.GetPlayerTransform().position - NPCDoctorBehavior.transform.position;
+        float angle = Vector2.Angle(NPCDoctorBehavior.transform.forward, directionToPlayer);
+        return angle <= -1 && NPCDoctorBehavior.GetPlayer().GetComponent<PlayerController>().IsDoctorInTrigger(NPCDoctorBehavior.GetComponent<Collider>());
     }
 }
