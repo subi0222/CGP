@@ -10,6 +10,7 @@ public class NPCDoctorMovement : MonoBehaviour
     // 플레이어에게 보일경우 멈추는 코드 추가
     private bool isSeenByPlayer = false; // 현재 보여지고 있나
     private Vector3 savedDestination;    // Nav Mesh 목적지 저장
+    public bool isShy = false;           // 플레이어가 처다볼때 멈추면 shy 
     // 여기까지 추가함
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -50,22 +51,25 @@ public class NPCDoctorMovement : MonoBehaviour
         }
 
         // 플레이어에게 보일경우 멈추는 코드 추가
-        if (isSeenByPlayer)
+        if (isShy)
         {
-            // 플레이어에게 보여지고 있으면 움직이지 않음
-            agent.isStopped = true;
-            savedDestination = agent.destination;
-            Debug.Log("doctor is being Seen by Player");
-            return;
-        }
+            if (isSeenByPlayer)
+            {
+                // 플레이어에게 보여지고 있으면 움직이지 않음
+                agent.isStopped = true;
+                savedDestination = agent.destination;
+                Debug.Log("doctor is being Seen by Player");
+                return;
+            }
 
-        if (!isSeenByPlayer)
-        {
-            // 플레이어에게 보여지고 있지않으면 마지막 목적지로 이동함
-            agent.isStopped = false;
-            agent.SetDestination(savedDestination);
-            Debug.Log("doctor is not being Seen by Player");
-            return;
+            if (!isSeenByPlayer)
+            {
+                // 플레이어에게 보여지고 있지않으면 마지막 목적지로 이동함
+                agent.isStopped = false;
+                agent.SetDestination(savedDestination);
+                Debug.Log("doctor is not being Seen by Player");
+                return;
+            }
         }
         // 여기까지 추가함
     }

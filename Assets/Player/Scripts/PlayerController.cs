@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 //이동 및 중앙 관리 스크립트입니다.
 public class PlayerController : MonoBehaviour
@@ -15,57 +17,78 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed = 3f;
     public float runSpeed = 5f;
     public float mouseSpeed = 20f;
+    public float sightRange = 65f;
     public Rigidbody rb;
     public PlayerInteraction playerInteraction;
     public PlayerAnimation playerAnimation;
-    public PlayerCameraBehaviourScript playerCamera;
+    public GameObject eye;
     
     private Vector3 _movement;
-    private Vector3 _rotation;
-    
+    private float _rotx;
+    private float _roty;
+    private GameObject _doctor;
+    private InputAction _moveAction;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        _moveAction = InputSystem.actions.FindAction("Move");
     }
     
     private void Update()
     {
-        
         // 새로 추가한 시야 처리용 함수입니다.
         CheckDoctorsInView();
 
-        if (playerInteraction.isAttacked()) return;
-        
+        if (playerInteraction.isAttacked())
+        {
+            LookAtDoctor();
+            return;
+        }
         moveSpeed = Mathf.SmoothDamp(moveSpeed, Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed, ref _sv, St);
-
-        _movement.x = Input.GetAxis("Horizontal") * moveSpeed;
-        _movement.z = Input.GetAxis("Vertical") * moveSpeed;
-        
-        //_rotation.y = Input.GetAxis("Mouse X") * mouseSpeed;
+        _movement = _moveAction.ReadValue<Vector3>() * moveSpeed;
+        _rotx = Input.GetAxis("Mouse X") * mouseSpeed;
+        _roty = Input.GetAxis("Mouse Y") * mouseSpeed;
     }
     
     private void FixedUpdate()
     {
-        if (playerInteraction.isAttacked()) return;
+        if (playerInteraction.isAttacked())
+        {
+            return;
+        }
         
         playerAnimation.Moving(_movement);
         _movement = rb.transform.TransformDirection(_movement);
         rb.MovePosition(rb.position + _movement * Time.fixedDeltaTime);
-        //rb.MoveRotation(rb.rotation * Quaternion.Euler(_rotation));
+        rb.MoveRotation(rb.rotation * Quaternion.Euler(0, _rotx, 0));
+        var x = eye.transform.localRotation.eulerAngles.x - _roty;
+        if (x < 180 && x > sightRange) x = sightRange;
+        else if (x > 180 && x < 360 - sightRange) x = 360 - sightRange;
+        eye.transform.localRotation = Quaternion.Euler(x, 0, 0);
+    }
+    
+    private void LookAtDoctor()
+    {
+        var angle = Quaternion.LookRotation(_doctor.transform.position - transform.position).normalized;
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler(0, angle.eulerAngles.y, 0), 1f);
+        var eyeAngle = Quaternion.LookRotation(_doctor.GetComponent<NPCDoctorBehavior>().GetHeadPosition() - eye.transform.position).normalized;
+        eye.transform.localRotation = Quaternion.Lerp(eye.transform.localRotation, Quaternion.Euler(eyeAngle.eulerAngles.x, 0, 0), 1f);
     }
     
     public bool IsDoctorInTrigger(Collider collider)
     {
-        if (collider.gameObject.name != "NPC") return false;
+        // name != "npc" 를 tag != "Doctor"로 변경
+        if (collider.gameObject.tag != "Doctor") return false;
         var dist = Vector2.Distance(this.transform.position, collider.gameObject.transform.position);
         var npc = collider.gameObject.GetComponent<NPCDoctorBehavior>();
+        Debug.Log("Caught - Distance: " + dist);
         return dist <= npc.GrabDistance;
     }
 
     public void SetGrabbed(GameObject obj)
     {
-        var doctor = obj.gameObject.GetComponent<NPCDoctorBehavior>();
-        playerCamera.setDoctorPos(doctor.GetHeadPosition());
+        _doctor = obj;
         playerInteraction.IdleToAttacked();
     }
     
