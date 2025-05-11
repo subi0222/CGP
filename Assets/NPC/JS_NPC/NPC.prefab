@@ -52,11 +52,7 @@ MonoBehaviour:
   HearingDistance: 10
   DetectionAngle: 100
   GrabDistance: 1
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  patrolPoints: []
   WistleSoundClip: {fileID: 0}
   FlashLightPrefab: {fileID: 1002705123656268, guid: d86ca2f4159e6a942abd8dfc52b38395, type: 3}
   FlashLightAttachSocketTransform: {fileID: 6591977201858118464}
@@ -118,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb823f23df291e4388eab49dbb8a877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShy: 0
 --- !u!1 &5269433440239236742
 GameObject:
   m_ObjectHideFlags: 0

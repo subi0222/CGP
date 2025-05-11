@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Doctor
   - Head
+  - PatrolPoint
   layers:
   - Default
   - TransparentFX
