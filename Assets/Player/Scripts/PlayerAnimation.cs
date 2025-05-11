@@ -1,6 +1,6 @@
 using UnityEngine;
 
-//애니메이션 관련 스크립트입니다.
+// 애니메이션 관련 스크립트입니다.
 public class PlayerAnimation : MonoBehaviour
 {
     public Animator anim;
