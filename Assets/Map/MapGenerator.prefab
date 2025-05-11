@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8121573896278805952
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5586619545198004101}
+  - component: {fileID: 5990747349448743376}
+  - component: {fileID: 2860132628857349156}
+  m_Layer: 0
+  m_Name: MapGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &5586619545198004101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121573896278805952}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 21.601639, y: 10.534985, z: 19.069952}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5990747349448743376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121573896278805952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e710a5e34c0a3b04993cce08dc627afd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  X_Axis: 50
+  Z_Axis: 50
+  floorMaterial: {fileID: 2100000, guid: 71d53c85cd69f0f4582c68719ec6ccca, type: 2}
+  floor_Y_Axis: 0.2
+  wallMaterial: {fileID: 2100000, guid: c0309792d4d285a43aa9c221013ff3a6, type: 2}
+  wallThickness: 0.2
+  wallHeight: 3
+  roomPrefabs:
+  - {fileID: 8044628714702267998, guid: eb99ce9f8fe075f4e8644af36a31f5a4, type: 3}
+  - {fileID: 3314277126500927383, guid: 295ba75cc5a7a9a4b83713a9060f4dad, type: 3}
+  - {fileID: 7517859542408953283, guid: a109212b99d0c4242921fcc9160ef818, type: 3}
+  - {fileID: 8056643679611337353, guid: 1f84fdcdbcf94ae469b841379091feaf, type: 3}
+  - {fileID: 2033776717970265391, guid: b3681db2161354f4ba0bbdcd450b5ee0, type: 3}
+  - {fileID: 1182214317519464661, guid: 85fcd98aaa5f0b2438a7ca1c7c87b3ab, type: 3}
+  - {fileID: 5910403215826405815, guid: 616a90e2f4a652f4e86ec2a8be4b7c3a, type: 3}
+  - {fileID: 5586070552244081025, guid: c9136e00baf70d147991977e4a65a44f, type: 3}
+  - {fileID: 8721657591960543851, guid: 1fb088b8c534e27468a28a467e2a0bb0, type: 3}
+  - {fileID: 2420473143639103117, guid: 923401b7c29587648805a3efa0a6010f, type: 3}
+  - {fileID: 7933835649268143794, guid: c8465a3aa72da404fba0ca2deea7f4ef, type: 3}
+  - {fileID: 7328853967993382529, guid: 50cdbf598b9a94640883e587c3ee2efd, type: 3}
+  examRoomPrefab: {fileID: 7517859542408953283, guid: a109212b99d0c4242921fcc9160ef818, type: 3}
+  innerMargin: 1
+  outerMargin: 2
+  maxTry: 200
+  exitPrefab: {fileID: 7753838507447472841, guid: 9946ef8839b9d4b438e6dd02d31afb90, type: 3}
+  minExitDistance: 40
+  playerPrefab: {fileID: 8388197307409558617, guid: 293db3cd0c2549246be31543de443b70, type: 3}
+--- !u!114 &2860132628857349156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121573896278805952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 0}
+  m_BuildHeightMesh: 0

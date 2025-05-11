@@ -7302,7 +7302,11 @@ GameObject:
   - component: {fileID: 8058950155567535312}
   - component: {fileID: 8066712462143064372}
   - component: {fileID: 8017901951433628284}
+<<<<<<< HEAD
   - component: {fileID: 3104269009010645293}
+=======
+  - component: {fileID: 4228845809603518974}
+>>>>>>> origin/JS
   m_Layer: 0
   m_Name: Door_Frame
   m_TagString: Untagged
@@ -7400,7 +7404,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cc8dc8258c356a14b9bf02775a033c9a, type: 3}
+<<<<<<< HEAD
 --- !u!114 &3104269009010645293
+=======
+--- !u!114 &4228845809603518974
+>>>>>>> origin/JS
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
