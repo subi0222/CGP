@@ -517,7 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544f3ef9a71c0f241b66a8017fad8b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiManager: {fileID: 0}
+  uiManager: {fileID: 7153607945098564624, guid: 0e4d1d704bf95c14bb8061444a3ef17b, type: 3}
   playerAnimation: {fileID: 5928933459744572579}
   difficulty: 1
 --- !u!114 &5928933459744572579
