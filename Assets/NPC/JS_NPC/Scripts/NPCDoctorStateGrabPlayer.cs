@@ -68,6 +68,6 @@ public class NPCDoctorStateGrabPlayer : NPCIDoctorState
     {
         Vector3 directionToPlayer = NPCDoctorBehavior.GetPlayerTransform().position - NPCDoctorBehavior.transform.position;
         float angle = Vector2.Angle(NPCDoctorBehavior.transform.forward, directionToPlayer);
-        return angle <= -1 && NPCDoctorBehavior.GetPlayer().GetComponent<PlayerController>().IsDoctorInTrigger(NPCDoctorBehavior.GetComponent<Collider>());
+        return angle <= 15 && NPCDoctorBehavior.GetPlayer().GetComponent<PlayerController>().IsDoctorInTrigger(NPCDoctorBehavior.GetComponent<Collider>());
     }
 }

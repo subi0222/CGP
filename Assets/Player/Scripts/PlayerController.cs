@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public float walkSpeed = 3f;
     public float runSpeed = 5f;
-    public float mouseSpeed = 20f;
+    public float mouseSpeed = 10f;
     public float sightRange = 65f;
     public Rigidbody rb;
     public PlayerInteraction playerInteraction;
@@ -73,16 +73,18 @@ public class PlayerController : MonoBehaviour
         var angle = Quaternion.LookRotation(_doctor.transform.position - transform.position).normalized;
         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler(0, angle.eulerAngles.y, 0), 1f);
         var eyeAngle = Quaternion.LookRotation(_doctor.GetComponent<NPCDoctorBehavior>().GetHeadPosition() - eye.transform.position).normalized;
-        eye.transform.localRotation = Quaternion.Lerp(eye.transform.localRotation, Quaternion.Euler(eyeAngle.eulerAngles.x, 0, 0), 1f);
+        eye.transform.localRotation = Quaternion.Lerp(eye.transform.localRotation, Quaternion.Euler(eyeAngle.eulerAngles.x, 25, 0), 1f);
     }
     
     public bool IsDoctorInTrigger(Collider collider)
     {
         // name != "npc" 를 tag != "Doctor"로 변경
         if (collider.gameObject.tag != "Doctor") return false;
-        var dist = Vector2.Distance(this.transform.position, collider.gameObject.transform.position);
+        var dist = Vector3.Distance(this.transform.position, collider.gameObject.transform.position);
         var npc = collider.gameObject.GetComponent<NPCDoctorBehavior>();
         Debug.Log("Caught - Distance: " + dist);
+        Debug.Log("Player Position: " + this.transform.position);
+        Debug.Log("Doctor Position: " + collider.gameObject.transform.position);
         return dist <= npc.GrabDistance;
     }
 
@@ -96,7 +98,6 @@ public class PlayerController : MonoBehaviour
     void CheckDoctorsInView()
     {
         Collider[] doctorsInRange = Physics.OverlapSphere(transform.position, viewRange, doctorMask);
-
         foreach (Collider doctorCollider in doctorsInRange)
         {
             NPCDoctorMovement doctor = doctorCollider.GetComponent<NPCDoctorMovement>();
