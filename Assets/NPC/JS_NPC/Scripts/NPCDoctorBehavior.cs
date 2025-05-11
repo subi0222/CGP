@@ -39,7 +39,7 @@ public class NPCDoctorBehavior : MonoBehaviour
     public float GrabDistance = 0.6f;
 
     // NPC의 탐색 포인트
-    public Transform[] patrolPoints;
+    public List<Transform> PatrolPoints = new List<Transform>();
 
     // NPC를를 부는 소리
     public AudioClip WistleSoundClip;
@@ -100,31 +100,31 @@ public class NPCDoctorBehavior : MonoBehaviour
 
     public Transform GetPatrolPoint(int index)
     {
-        if (index >= 0 && index < patrolPoints.Length)
+        if (index >= 0 && index < PatrolPoints.Count)
         {
-            return patrolPoints[index];
+            return PatrolPoints[index];
         }
         return null;
     }
 
     public Transform GetRandomPatrolPoint()
     {
-        return patrolPoints[Random.Range(0, patrolPoints.Length)];
+        return PatrolPoints[Random.Range(0, PatrolPoints.Count)];
     }
 
     public Transform GetNextPatrolPoint(int index)
     {
-        return patrolPoints[(index + 1) % patrolPoints.Length];
+        return PatrolPoints[(index + 1) % PatrolPoints.Count];
     }
 
     public int GetRandomPatriolPointIndex()
     {
-        return Random.Range(0, patrolPoints.Length);
+        return Random.Range(0, PatrolPoints.Count);
     }
 
     public int GetNextPointIndex(int index)
     {
-        return (index + 1) % patrolPoints.Length;
+        return (index + 1) % PatrolPoints.Count;
     }
 
     public Animator GetAnimator()
@@ -139,6 +139,12 @@ public class NPCDoctorBehavior : MonoBehaviour
         FlashLightInstance = Instantiate(FlashLightPrefab, FlashLightAttachSocketTransform.position, FlashLightAttachSocketTransform.rotation, FlashLightAttachSocketTransform);
         currentState = new NPCDoctorStatePatrol(); // 초기 상태 설정
         currentState.stateInit(this); // 상태 초기화
+        PatrolPoints.Clear(); // PatrolPoints 리스트 초기화
+        GameObject[] allPatrolPoints = GameObject.FindGameObjectsWithTag("PatrolPoint");
+        foreach (GameObject point in allPatrolPoints)
+        {
+            PatrolPoints.Add(point.transform); // PatrolPoints 리스트에 모든 PatrolPoint 추가
+        }
     }
 
     // NPC 상태를 매 프레임마다 업데이트
@@ -165,7 +171,7 @@ public class NPCDoctorBehavior : MonoBehaviour
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        foreach (Transform point in patrolPoints)
+        foreach (Transform point in PatrolPoints)
         {
             Gizmos.DrawSphere(point.position, 0.5f);
         }
