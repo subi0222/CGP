@@ -38,6 +38,9 @@ public class MapGenerator : MonoBehaviour
     [Header("Player")]
     public GameObject playerPrefab;
 
+    [Header("Doctor")]
+    public GameObject doctorPrefab;
+
     Transform map;
     List<RoomInfo> infos = new List<RoomInfo>();
 
@@ -97,6 +100,8 @@ public class MapGenerator : MonoBehaviour
             GameObject player = Instantiate(playerPrefab, spawnPoint, Quaternion.identity);
             player.name = "Player";
         }
+
+        placeDoctor();
     }
 
     // 바닥 생성
@@ -366,6 +371,31 @@ public class MapGenerator : MonoBehaviour
     {
         obj.layer = layer;
         foreach (Transform c in obj.transform) SetLayerRecursively(c.gameObject, layer);
+    }
+
+    // 의사 생성
+    void placeDoctor()
+    {
+        float margin = 0.5f;
+        float x = X_Axis * 0.5f - margin;
+        float z = Z_Axis * 0.5f - margin;
+        float y = floor_Y_Axis;
+
+        Vector3[] corners =
+        {
+            new Vector3(-x,y,-z),
+            new Vector3(x,y,-z),
+            new Vector3(-x,y,z),
+            new Vector3(x,y,z),
+        };
+
+        foreach (var i in corners)
+        {
+            var doctor = Instantiate(doctorPrefab, i, Quaternion.identity, map);
+            doctor.name = "Doctor";
+            doctor.isStatic = false;
+            SetLayerRecursively(doctor, navLayer);
+        }
     }
 
     // 경계 계산
