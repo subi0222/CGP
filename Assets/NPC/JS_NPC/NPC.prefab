@@ -51,8 +51,8 @@ MonoBehaviour:
   DetectionDistance: 5
   HearingDistance: 10
   DetectionAngle: 100
-  GrabDistance: 1
-  patrolPoints: []
+  GrabDistance: 1.2
+  PatrolPoints: []
   WistleSoundClip: {fileID: 0}
   FlashLightPrefab: {fileID: 1002705123656268, guid: d86ca2f4159e6a942abd8dfc52b38395, type: 3}
   FlashLightAttachSocketTransform: {fileID: 6591977201858118464}
