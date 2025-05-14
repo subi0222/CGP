@@ -30,6 +30,11 @@ public class NPCDoctorMovement : MonoBehaviour
             Vector3 localDir = transform.InverseTransformDirection(velocity.normalized);
             animator.SetFloat("X", localDir.x, 0.1f, Time.deltaTime);
             animator.SetFloat("Y", localDir.z, 0.1f, Time.deltaTime);
+        }
+        
+        // * 수정: Idle 때의 Action Type가 Humanoid가 아니어서 발생했던 문제로 보입니다. 
+        // 그래서 의사 정지 해결을 위한 코드는 일단 주석처리 해놨습니다.
+        /*
             // 의사 정지시 이상한 포즈 해결 위한 코드 추가
             animator.speed = 1f;
             // 여기까지 추가함
@@ -49,7 +54,8 @@ public class NPCDoctorMovement : MonoBehaviour
             }
             // 여기까지 변경함
         }
-
+        */
+        
         // 플레이어에게 보일경우 멈추는 코드 추가
         if (isShy)
         {
