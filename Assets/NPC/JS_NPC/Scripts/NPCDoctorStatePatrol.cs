@@ -35,7 +35,7 @@ public class NPCDoctorStatePatrol : NPCIDoctorState
 
     public void stateContinue()
     {
-        if (agent.remainingDistance <= 0.5f)
+        if (agent.remainingDistance <= 2.5f)
         {
             currentPatrolIndex = NPCDoctor.GetNextPointIndex(currentPatrolIndex);
             nowPatrolPoint = NPCDoctor.GetNextPatrolPoint(currentPatrolIndex);
