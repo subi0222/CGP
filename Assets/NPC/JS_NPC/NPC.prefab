@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aca22654896bde4eb4f3475439340f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DetectionDistance: 5
+  DetectionDistance: 9
   HearingDistance: 10
   DetectionAngle: 100
   GrabDistance: 1.2
