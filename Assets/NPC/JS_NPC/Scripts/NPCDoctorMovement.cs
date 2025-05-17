@@ -31,7 +31,7 @@ public class NPCDoctorMovement : MonoBehaviour
             animator.SetFloat("X", localDir.x, 0.1f, Time.deltaTime);
             animator.SetFloat("Y", localDir.z, 0.1f, Time.deltaTime);
         }
-        
+
         // * 수정: Idle 때의 Action Type가 Humanoid가 아니어서 발생했던 문제로 보입니다. 
         // 그래서 의사 정지 해결을 위한 코드는 일단 주석처리 해놨습니다.
         /*
@@ -55,29 +55,29 @@ public class NPCDoctorMovement : MonoBehaviour
             // 여기까지 변경함
         }
         */
-        
-        // // 플레이어에게 보일경우 멈추는 코드 추가
-        // if (isShy)
-        // {
-        //     if (isSeenByPlayer)
-        //     {
-        //         // 플레이어에게 보여지고 있으면 움직이지 않음
-        //         agent.isStopped = true;
-        //         savedDestination = agent.destination;
-        //         Debug.Log("doctor is being Seen by Player");
-        //         return;
-        //     }
-        //
-        //     if (!isSeenByPlayer)
-        //     {
-        //         // 플레이어에게 보여지고 있지않으면 마지막 목적지로 이동함
-        //         agent.isStopped = false;
-        //         agent.SetDestination(savedDestination);
-        //         Debug.Log("doctor is not being Seen by Player");
-        //         return;
-        //     }
-        // }
-        // // 여기까지 추가함
+
+        // 플레이어에게 보일경우 멈추는 코드 추가
+        if (isShy)
+        {
+            if (isSeenByPlayer)
+            {
+                // 플레이어에게 보여지고 있으면 움직이지 않음
+                agent.isStopped = true;
+                savedDestination = agent.destination;
+                // Debug.Log("doctor is being Seen by Player");
+                return;
+            }
+
+            if (!isSeenByPlayer)
+            {
+                // 플레이어에게 보여지고 있지않으면 마지막 목적지로 이동함
+                agent.isStopped = false;
+                agent.SetDestination(savedDestination);
+                // Debug.Log("doctor is not being Seen by Player");
+                return;
+            }
+        }
+        // 여기까지 추가함
     }
 
     void LateUpdate()

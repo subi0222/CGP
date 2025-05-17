@@ -152,13 +152,13 @@ public class NPCDoctorBehavior : MonoBehaviour
     {
         if (currentState != null)
         {
-            Debug.Log(currentState.ToString()); // 현재 상태 출력
+            // Debug.Log(currentState.ToString()); // 현재 상태 출력
             NPCIDoctorState newState = currentState.canChangeState(); // 상태 변경 가능 여부 확인
             if (newState != null && newState != currentState)
             {
                 currentState = newState; // 상태 변경
                 currentState.stateInit(this); // 새로운 상태 초기화
-                Debug.Log("State changed to: " + currentState.ToString()); // 상태 변경 로그
+                // Debug.Log("State changed to: " + currentState.ToString()); // 상태 변경 로그
             }
             else
             {

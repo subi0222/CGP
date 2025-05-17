@@ -64,7 +64,9 @@ public class MapGenerator : MonoBehaviour
 
         navLayer = LayerMask.NameToLayer(NavLayerName);
     }
-    void Start()
+
+    //GameManager에서 관리할 수 있도록 함수명을 변경하였습니다.
+    public void StartMapGeneration()
     {
         map = new GameObject("Map").transform;
         map.SetParent(transform, true);
