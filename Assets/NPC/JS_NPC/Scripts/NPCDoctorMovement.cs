@@ -56,28 +56,28 @@ public class NPCDoctorMovement : MonoBehaviour
         }
         */
         
-        // 플레이어에게 보일경우 멈추는 코드 추가
-        if (isShy)
-        {
-            if (isSeenByPlayer)
-            {
-                // 플레이어에게 보여지고 있으면 움직이지 않음
-                agent.isStopped = true;
-                savedDestination = agent.destination;
-                Debug.Log("doctor is being Seen by Player");
-                return;
-            }
-
-            if (!isSeenByPlayer)
-            {
-                // 플레이어에게 보여지고 있지않으면 마지막 목적지로 이동함
-                agent.isStopped = false;
-                agent.SetDestination(savedDestination);
-                Debug.Log("doctor is not being Seen by Player");
-                return;
-            }
-        }
-        // 여기까지 추가함
+        // // 플레이어에게 보일경우 멈추는 코드 추가
+        // if (isShy)
+        // {
+        //     if (isSeenByPlayer)
+        //     {
+        //         // 플레이어에게 보여지고 있으면 움직이지 않음
+        //         agent.isStopped = true;
+        //         savedDestination = agent.destination;
+        //         Debug.Log("doctor is being Seen by Player");
+        //         return;
+        //     }
+        //
+        //     if (!isSeenByPlayer)
+        //     {
+        //         // 플레이어에게 보여지고 있지않으면 마지막 목적지로 이동함
+        //         agent.isStopped = false;
+        //         agent.SetDestination(savedDestination);
+        //         Debug.Log("doctor is not being Seen by Player");
+        //         return;
+        //     }
+        // }
+        // // 여기까지 추가함
     }
 
     void LateUpdate()

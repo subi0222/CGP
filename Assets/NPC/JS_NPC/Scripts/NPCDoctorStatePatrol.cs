@@ -37,7 +37,7 @@ public class NPCDoctorStatePatrol : NPCIDoctorState
     {
         if (agent.remainingDistance <= 2.5f)
         {
-            currentPatrolIndex = NPCDoctor.GetNextPointIndex(currentPatrolIndex);
+            currentPatrolIndex = NPCDoctor.GetRandomPatriolPointIndex();
             nowPatrolPoint = NPCDoctor.GetNextPatrolPoint(currentPatrolIndex);
             if (nowPatrolPoint != null)
             {

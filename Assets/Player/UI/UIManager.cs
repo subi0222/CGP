@@ -8,11 +8,18 @@ public class UIManager : MonoBehaviour
     public Slider qteSlider;
 
     public GameObject deathUI;
+    public GameObject GameStartUI;
     
-    private void Start()
+    public void Start()
     {
         qteUI.gameObject.SetActive(false);
         deathUI.gameObject.SetActive(false);
+        GameStartUI.gameObject.SetActive(false);
+    }
+
+    public void SetGameStartUI(bool enable)
+    {
+        GameStartUI.gameObject.SetActive(enable);
     }
 
     public void SetDeathUI(bool enable)
@@ -28,5 +35,15 @@ public class UIManager : MonoBehaviour
     public void SetQteValue(float value)
     {
         qteSlider.value = value;
+    }
+
+    public void OnClickQuit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+
+        Application.Quit();
+#endif
     }
 }
