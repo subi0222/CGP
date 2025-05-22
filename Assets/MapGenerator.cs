@@ -91,6 +91,7 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+        BuildCeiling();
         surface.BuildNavMesh();
 
         if (playerPrefab != null && examRoomObj != null)
@@ -239,7 +240,10 @@ public class MapGenerator : MonoBehaviour
             return false;
 
         foreach (var (obj, doors) in placedRooms)
+        {
             CreateRoomWalls(obj, doors);
+            PatchDoorGaps(doors, CalcBounds(obj));
+        }
 
         BuildOuterWalls();
 
@@ -301,16 +305,18 @@ public class MapGenerator : MonoBehaviour
 
     void SpawnWall(float mid, float fixedC, float length, bool horizontal)
     {
+        float fixY = floor_Y_Axis + wallHeight * 0.5f;
+
         Vector3 pos, scale;
 
         if (horizontal)
         {
-            pos = new Vector3(mid, wallHeight * .5f, fixedC);
+            pos = new Vector3(mid, fixY, fixedC);
             scale = new Vector3(length, wallHeight, wallThickness);
         }
         else
         {
-            pos = new Vector3(fixedC, wallHeight * .5f, mid);
+            pos = new Vector3(fixedC, fixY, mid);
             scale = new Vector3(wallThickness, wallHeight, length);
         }
 
@@ -335,6 +341,76 @@ public class MapGenerator : MonoBehaviour
         SpawnWall(0, -hz - thick * .5f, X_Axis, true);
         SpawnWall(0, hx + thick * .5f, Z_Axis, false);
         SpawnWall(0, -hx - thick * .5f, Z_Axis, false);
+    }
+
+    void BuildCeiling()
+    {
+        float thickness = 0.05f;
+        float ceilY = floor_Y_Axis + wallHeight;
+
+        var ceil = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+        ceil.name = "Ceiling";
+        ceil.transform.SetParent(map, true);
+        ceil.transform.localScale = new Vector3(X_Axis,thickness,Z_Axis);
+        ceil.transform.position = new Vector3(0f, ceilY, 0f);
+
+        ceil.GetComponent<Renderer>().sharedMaterial = wallMaterial;
+        
+        var mod = ceil.AddComponent<NavMeshModifier>();
+        mod.ignoreFromBuild = true;
+
+        ceil.isStatic = true;
+    }
+
+    // 문틀 채우기
+    void SpawnDoorCap(Transform door)
+    {
+        var render = door.GetComponentInChildren<Renderer>();
+        if (render == null) return;
+
+        Bounds bound = render.bounds;
+        float ceilY = floor_Y_Axis + wallHeight;
+        float height = ceilY - bound.max.y;
+        if (height < 0.01f) return;
+
+        bool horizontal = Mathf.Abs(door.forward.z) > Mathf.Abs(door.forward.x); // 문 방향 판정
+        float capThickness = wallThickness;
+
+        Vector3 pos, scale;
+
+        if (horizontal)  // 문 z축 위치
+        {
+            scale = new Vector3(bound.size.x, height, capThickness);
+
+            float zShift = Mathf.Sign(door.forward.z) * (wallThickness * .5f);
+            pos = new Vector3(bound.center.x,
+                              bound.max.y + height * .5f,
+                              bound.center.z + zShift);
+        }
+        else // 문 x축 위치
+        {
+            scale = new Vector3(capThickness, height, bound.size.z);
+
+            float xShift = Mathf.Sign(door.forward.x) * (wallThickness * .5f);
+            pos = new Vector3(bound.center.x + xShift,
+                              bound.max.y + height * .5f,
+                              bound.center.z);
+        }
+
+        var cap = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cap.name = "DoorCap";
+
+        cap.transform.SetParent(map, true);
+        cap.transform.position = pos;
+        cap.transform.localScale = scale;
+
+        cap.GetComponent<Renderer>().sharedMaterial = wallMaterial;
+    }
+
+    void PatchDoorGaps(Transform[] doors, Bounds roomB)
+    {
+        foreach (var d in doors) SpawnDoorCap(d);
     }
 
     //출구 생성 - Exam Room을 기준으로 일정 거리 이상에서 생성

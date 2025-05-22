@@ -168,6 +168,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5990747349448743376, guid: 10275191dac06e24dbfec24a27a9a64f, type: 3}
+      propertyPath: wallHeight
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5990747349448743376, guid: 10275191dac06e24dbfec24a27a9a64f, type: 3}
+      propertyPath: innerMargin
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5990747349448743376, guid: 10275191dac06e24dbfec24a27a9a64f, type: 3}
       propertyPath: doctorPrefab
       value: 
       objectReference: {fileID: 2732121974428133535, guid: 2472c420317e2dc4a852433da6d505ed, type: 3}
