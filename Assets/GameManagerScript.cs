@@ -57,6 +57,28 @@ public class GameManagerScript : MonoBehaviour
         isGameOver = false;
     }
 
+    public void OnClickRestart()
+    {
+        //Debug.Log("Pressed");
+        uiManager.SetGamePauseUI(false);
+        var audioSource = musicManager.GetComponent<AudioSource>();
+        audioSource.Stop();
+        DestroyImmediate(mapGenerator.transform.GetChild(0).gameObject);
+        DestroyImmediate(playerInteraction.gameObject);
+        OnClickStart();
+    }
+
+    public void OnClickMainMenu()
+    {
+        uiManager.SetGamePauseUI(false);
+        var audioSource = musicManager.GetComponent<AudioSource>();
+        audioSource.Stop();
+        Cursor.lockState = CursorLockMode.None;
+        DestroyImmediate(mapGenerator.transform.GetChild(0).gameObject);
+        DestroyImmediate(playerInteraction.gameObject);
+        Start();
+    }
+
     public void OnClickQuit()
     {
         isGameOver = true;

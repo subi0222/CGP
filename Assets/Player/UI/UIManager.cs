@@ -9,12 +9,25 @@ public class UIManager : MonoBehaviour
 
     public GameObject deathUI;
     public GameObject GameStartUI;
+    public GameObject gamePauseUI;
+    
+    public GameObject musicManager;
     
     public void Start()
     {
         qteUI.gameObject.SetActive(false);
         deathUI.gameObject.SetActive(false);
         GameStartUI.gameObject.SetActive(false);
+        gamePauseUI.gameObject.SetActive(false);
+    }
+
+    public void SetGamePauseUI(bool enable)
+    {
+        var audioSource = musicManager.GetComponent<AudioSource>();
+        audioSource.mute = enable;
+        Cursor.lockState = enable ? CursorLockMode.None : CursorLockMode.Locked;
+        gamePauseUI.gameObject.SetActive(enable);
+        Time.timeScale = enable ? 0 : 1;
     }
 
     public void SetGameStartUI(bool enable)

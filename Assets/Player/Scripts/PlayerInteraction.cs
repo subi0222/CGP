@@ -21,9 +21,13 @@ public class PlayerInteraction : MonoBehaviour
     {
         Idle,
         Attacked,
+        Died,
     }
     // 기본 State 설정
     private State _state = State.Idle;
+
+    private bool _isPaused = false;
+    private bool _isDead = false;
 
     private void Start()
     {
@@ -32,6 +36,12 @@ public class PlayerInteraction : MonoBehaviour
     
     private void Update()
     {
+        if (!_isDead && Input.GetKeyDown(KeyCode.Escape))
+        {
+            _isPaused = !_isPaused;
+            uiManager.SetGamePauseUI(_isPaused);
+        }
+        
         switch (_state)
         {
             case State.Idle:
@@ -57,6 +67,8 @@ public class PlayerInteraction : MonoBehaviour
     {
         uiManager.SetQteUI(false);
         uiManager.SetDeathUI(true);
+        _isDead = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void SetQte(float value)
