@@ -87,4 +87,9 @@ public class PlayerInteraction : MonoBehaviour
     {
         return _state == State.Attacked;
     }
+    
+    public float GetQte()
+    {
+        return _qte;
+    }
 }
