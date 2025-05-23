@@ -76,7 +76,8 @@ GameObject:
   - component: {fileID: 5396373947382768863}
   - component: {fileID: 2755108154502091459}
   - component: {fileID: 2240545336316684835}
-  m_Layer: 0
+  - component: {fileID: 3329592169049285138}
+  m_Layer: 9
   m_Name: CinemachineCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,6 +168,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LookAtOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &3329592169049285138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6223439820878566717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449ef5ebbe24720439ec31d15f7b6f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weight: 1
+  FocusTracking: 0
+  FocusTarget: {fileID: 0}
+  FocusOffset: 0
+  Profile: {fileID: 11400000, guid: 4ed72be07367991428c4454a6b7dc316, type: 2}
 --- !u!1 &8733627287476261909
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,6 +575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewRange: 15
   viewAngle: 60
+  sightRange: 65
   doctorMask:
     serializedVersion: 2
     m_Bits: 64
@@ -564,7 +583,6 @@ MonoBehaviour:
   walkSpeed: 3
   runSpeed: 5
   mouseSpeed: 10
-  sightRange: 65
   rb: {fileID: 6813515094880172761}
   playerInteraction: {fileID: 4391302040713059912}
   playerAnimation: {fileID: 5928933459744572579}
