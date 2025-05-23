@@ -11,7 +11,8 @@ public class UIManager : MonoBehaviour
     public GameObject GameStartUI;
     public GameObject gamePauseUI;
     
-    public GameObject musicManager;
+    private MusicManagerScript musicManager;
+    
     
     public void Start()
     {
@@ -19,14 +20,14 @@ public class UIManager : MonoBehaviour
         deathUI.gameObject.SetActive(false);
         GameStartUI.gameObject.SetActive(false);
         gamePauseUI.gameObject.SetActive(false);
+        musicManager = GameObject.Find("MusicManager").GetComponent<MusicManagerScript>();
     }
 
     public void SetGamePauseUI(bool enable)
     {
-        var audioSource = musicManager.GetComponent<AudioSource>();
-        audioSource.mute = enable;
         Cursor.lockState = enable ? CursorLockMode.None : CursorLockMode.Locked;
         gamePauseUI.gameObject.SetActive(enable);
+        musicManager.GamePause();
         Time.timeScale = enable ? 0 : 1;
     }
 

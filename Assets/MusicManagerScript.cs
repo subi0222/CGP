@@ -86,15 +86,16 @@ public class MusicManagerScript : MonoBehaviour
 
         table = new EventActionEntry[]
         {
-            new EventActionEntry(MusicState.STATE_GAME_START, isGameStart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
+            new EventActionEntry(MusicState.STATE_GAME_START, IsGameStart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
             new EventActionEntry(MusicState.STATE_NPC_PATROL, IsGamePaused, StopBGM, MusicState.STATE_GAME_PAUSE),
             new EventActionEntry(MusicState.STATE_NPC_PATROL, IsAllDoctorsPatrol, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
             new EventActionEntry(MusicState.STATE_NPC_PATROL, IsPlayerDetected, PlayDetectedBGM, MusicState.STATE_PLAYER_DETECTED),
-            new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsPlayerDetected, PlayDetectedBGM, MusicState.STATE_PLAYER_DETECTED),
             new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsGamePaused, StopBGM, MusicState.STATE_GAME_PAUSE),
             new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsPlayerRestrained, PlayRestrainedBGM, MusicState.STATE_PLAYER_RESTRAINED),
+            new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsPlayerDetected, PlayDetectedBGM, MusicState.STATE_PLAYER_DETECTED),
             new EventActionEntry(MusicState.STATE_PLAYER_RESTRAINED, IsGamePaused, StopBGM, MusicState.STATE_GAME_PAUSE),
-            new EventActionEntry(MusicState.STATE_PLAYER_RESTRAINED, IsGameRestart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
+            new EventActionEntry(MusicState.STATE_GAME_PAUSE, IsGameMainMenu, StopBGM, MusicState.STATE_GAME_START),
+            new EventActionEntry(MusicState.STATE_GAME_PAUSE, IsGameRestart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL)
         };
     }
 
@@ -107,7 +108,7 @@ public class MusicManagerScript : MonoBehaviour
                 table[i].action();
                 curState = table[i].nextState;
             }
-        }
+        }   
     }
 
     public void GameStart()
@@ -122,6 +123,7 @@ public class MusicManagerScript : MonoBehaviour
         playerInteraction = PlayerGameObject.GetComponent<PlayerInteraction>();
         bGameOver = false;
         bGameStart = true;
+        bGamePaused = false;
     }
 
     public void GameEnd()
@@ -146,9 +148,21 @@ public class MusicManagerScript : MonoBehaviour
         bGameStart = true;
     }
 
+    public void GameQuit()
+    {
+        bGameStart = false;
+        bGameOver = false;
+        bGamePaused = false;
+    }
+
     private bool IsGameOver()
     {
         return bGameOver;
+    }
+
+    private bool IsGameMainMenu()
+    {
+        return !bGameStart;
     }
     
     private bool IsGamePaused()
@@ -158,10 +172,10 @@ public class MusicManagerScript : MonoBehaviour
 
     private bool IsGameRestart()
     {
-        return !bGameOver;
+        return bGameStart && !bGamePaused;
     }
     
-    private bool isGameStart()
+    private bool IsGameStart()
     {
         return bGameStart;
     }
@@ -193,6 +207,12 @@ public class MusicManagerScript : MonoBehaviour
 
     private void PlayBGM(AudioClip clip)
     {
+        if (!audioSource.isPlaying)
+        {
+            audioSource.clip = clip;
+            audioSource.Play();
+            return;
+        }
         if (audioSource.clip == clip) return; // 같은 음악이면 무시
         audioSource.clip = clip;
         audioSource.Play();

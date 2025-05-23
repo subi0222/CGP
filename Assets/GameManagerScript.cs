@@ -26,6 +26,7 @@ public class GameManagerScript : MonoBehaviour
     {
         uiManager = UIMangerObject.GetComponent<UIManager>();
         mapGenerator = MapGeneratorObject.GetComponent<MapGenerator>();
+        musicManager = MusicManagerObject.GetComponent<MusicManagerScript>();
     }
     public void Start()
     {
@@ -48,8 +49,7 @@ public class GameManagerScript : MonoBehaviour
     {
         //Debug.Log("Pressed");
         uiManager.SetGamePauseUI(false);
-        var audioSource = musicManager.GetComponent<AudioSource>();
-        audioSource.Stop();
+        musicManager.GameRestart();
         DestroyImmediate(mapGenerator.transform.GetChild(0).gameObject);
         DestroyImmediate(playerInteraction.gameObject);
         OnClickStart();
@@ -58,8 +58,7 @@ public class GameManagerScript : MonoBehaviour
     public void OnClickMainMenu()
     {
         uiManager.SetGamePauseUI(false);
-        var audioSource = musicManager.GetComponent<AudioSource>();
-        audioSource.Stop();
+        musicManager.GameQuit();
         Cursor.lockState = CursorLockMode.None;
         DestroyImmediate(mapGenerator.transform.GetChild(0).gameObject);
         DestroyImmediate(playerInteraction.gameObject);
@@ -68,7 +67,6 @@ public class GameManagerScript : MonoBehaviour
 
     public void OnClickQuit()
     {
-        musicManager.GameEnd();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
