@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,7 +12,54 @@ public class MusicManagerScript : MonoBehaviour
     public AudioClip DetectedBGM;
     public AudioClip RestrainedBGM;
 
-    void Start()
+
+    [Header("MusicManager")] public GameObject MusicManagerObject;
+
+    private MusicManagerScript musicManager;
+
+    List<NPCDoctorBehavior> Doctors = new List<NPCDoctorBehavior>();
+
+    private GameObject PlayerGameObject;
+
+    private PlayerInteraction playerInteraction;
+
+    private bool isGameOver = false;
+
+    public enum MusicState
+    {
+        STATE_GAME_START,
+        STATE_NPC_PATROL,
+        STATE_PLAYER_DETECTED,
+        STATE_PLAYER_RESTRAINED,
+        STATE_GAME_PAUSE,
+        STATE_GAME_END
+    }
+
+
+    private struct EventActionEntry
+    {
+        public MusicState curState;
+        public ActionDelegate canChangeState;
+        public ActionDelegate action;
+        public MusicState nextState;
+
+        public delegate void ActionDelegate();
+
+        public EventActionEntry(MusicState state, ActionDelegate canChange, ActionDelegate action, MusicState next)
+        {
+            curState = state;
+            canChangeState = canChange;
+            this.action = action;
+            nextState = next;
+        }
+    }
+
+    private EventActionEntry[] table = new EventActionEntry[]
+    {
+    };
+
+
+void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
@@ -28,6 +77,43 @@ public class MusicManagerScript : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void GameStart()
+    {
+        GameObject[] DoctorArray = GameObject.FindGameObjectsWithTag("Doctor");
+        foreach (GameObject doctor in DoctorArray)
+        {
+            Doctors.Add(doctor.GetComponent<NPCDoctorBehavior>());
+        }
+        PlayerGameObject = GameObject.FindGameObjectWithTag("Player");
+        playerInteraction = PlayerGameObject.GetComponent<PlayerInteraction>();
+        isGameOver = false;
+    }
+
+    public void GameEnd()
+    {
+        isGameOver = true;
+    }
+    
+    private bool IsAllDoctorsPatrol()
+    {
+        foreach (NPCDoctorBehavior doctor in Doctors)
+        {
+            if (doctor.GetCurrentState() is NPCDoctorStateGrabPlayer || 
+                doctor.GetCurrentState() is NPCDoctorStateFollowingPlayer)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool IsPlayerRestrained()
+    {
+        return playerInteraction.GetQte() <= 0;
+    }
+    
+    
 
     public void PlayBGM(AudioClip clip)
     {
