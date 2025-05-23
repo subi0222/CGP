@@ -118,4 +118,9 @@ public class ExitTile : MonoBehaviour
         if (_fpCam != null) _fpCam.Priority = _origFpPrio;
         if (_tpCam != null) _tpCam.Priority = _origTpPrio;
     }
+    
+    public bool GetPlayerInside()
+    {
+        return _playerInside;
+    }
 }

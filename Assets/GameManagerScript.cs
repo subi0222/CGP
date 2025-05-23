@@ -20,6 +20,8 @@ public class GameManagerScript : MonoBehaviour
     
     private MusicManagerScript musicManager;
     
+    private PlayerInteraction playerInteraction;
+    
     public void Awake()
     {
         uiManager = UIMangerObject.GetComponent<UIManager>();
@@ -39,6 +41,7 @@ public class GameManagerScript : MonoBehaviour
         uiManager.SetQteUI(false);
         mapGenerator.StartMapGeneration();
         musicManager.GameStart();
+        playerInteraction = GameObject.Find("Player").GetComponent<PlayerInteraction>();
     }
 
     public void OnClickRestart()

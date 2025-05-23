@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 public class MusicManagerScript : MonoBehaviour
 {
@@ -11,8 +13,7 @@ public class MusicManagerScript : MonoBehaviour
     public AudioClip PatrolBGM;
     public AudioClip DetectedBGM;
     public AudioClip RestrainedBGM;
-
-
+    
     [Header("MusicManager")] public GameObject MusicManagerObject;
 
     private MusicManagerScript musicManager;
@@ -23,7 +24,13 @@ public class MusicManagerScript : MonoBehaviour
 
     private PlayerInteraction playerInteraction;
 
-    private bool isGameOver = false;
+    private  bool bGameOver = false;
+
+    private  bool bGamePaused = false;
+
+    private  bool bGameStart = false;
+    
+    private MusicState curState = MusicState.STATE_GAME_START;
 
     public enum MusicState
     {
@@ -36,16 +43,18 @@ public class MusicManagerScript : MonoBehaviour
     }
 
 
-    private struct EventActionEntry
+    public struct EventActionEntry
     {
         public MusicState curState;
-        public ActionDelegate canChangeState;
-        public ActionDelegate action;
+        public CheckDelegate canChangeState;
+        public  ActionDelegate action;
         public MusicState nextState;
 
         public delegate void ActionDelegate();
+        
+        public delegate bool CheckDelegate();
 
-        public EventActionEntry(MusicState state, ActionDelegate canChange, ActionDelegate action, MusicState next)
+        public EventActionEntry(MusicState state, CheckDelegate canChange, ActionDelegate action, MusicState next)
         {
             curState = state;
             canChangeState = canChange;
@@ -54,12 +63,10 @@ public class MusicManagerScript : MonoBehaviour
         }
     }
 
-    private EventActionEntry[] table = new EventActionEntry[]
-    {
-    };
+    private EventActionEntry[] table;
 
 
-void Start()
+    void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
@@ -76,6 +83,31 @@ void Start()
         {
             Destroy(gameObject);
         }
+
+        table = new EventActionEntry[]
+        {
+            new EventActionEntry(MusicState.STATE_GAME_START, isGameStart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
+            new EventActionEntry(MusicState.STATE_NPC_PATROL, IsGamePaused, StopBGM, MusicState.STATE_GAME_PAUSE),
+            new EventActionEntry(MusicState.STATE_NPC_PATROL, IsAllDoctorsPatrol, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
+            new EventActionEntry(MusicState.STATE_NPC_PATROL, IsPlayerDetected, PlayDetectedBGM, MusicState.STATE_PLAYER_DETECTED),
+            new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsPlayerDetected, PlayDetectedBGM, MusicState.STATE_PLAYER_DETECTED),
+            new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsGamePaused, StopBGM, MusicState.STATE_GAME_PAUSE),
+            new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsPlayerRestrained, PlayRestrainedBGM, MusicState.STATE_PLAYER_RESTRAINED),
+            new EventActionEntry(MusicState.STATE_PLAYER_RESTRAINED, IsGamePaused, StopBGM, MusicState.STATE_GAME_PAUSE),
+            new EventActionEntry(MusicState.STATE_PLAYER_RESTRAINED, IsGameRestart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
+        };
+    }
+
+    public void Update()
+    {
+        for (int i = 0; i < table.Length; i++)
+        {
+            if (curState == table[i].curState && table[i].canChangeState())
+            {
+                table[i].action();
+                curState = table[i].nextState;
+            }
+        }
     }
 
     public void GameStart()
@@ -85,16 +117,55 @@ void Start()
         {
             Doctors.Add(doctor.GetComponent<NPCDoctorBehavior>());
         }
+
         PlayerGameObject = GameObject.FindGameObjectWithTag("Player");
         playerInteraction = PlayerGameObject.GetComponent<PlayerInteraction>();
-        isGameOver = false;
+        bGameOver = false;
+        bGameStart = true;
     }
 
     public void GameEnd()
     {
-        isGameOver = true;
+        bGameOver = true;
+        bGameStart = false;
+    }
+
+    public void GamePause()
+    {
+        bGamePaused = true;
+    }
+
+    public void GameResume()
+    {
+        bGamePaused = false;
+    }
+
+    public void GameRestart()
+    {
+        bGameOver = false;
+        bGameStart = true;
+    }
+
+    private bool IsGameOver()
+    {
+        return bGameOver;
     }
     
+    private bool IsGamePaused()
+    {
+        return bGamePaused;
+    }
+
+    private bool IsGameRestart()
+    {
+        return !bGameOver;
+    }
+    
+    private bool isGameStart()
+    {
+        return bGameStart;
+    }
+
     private bool IsAllDoctorsPatrol()
     {
         foreach (NPCDoctorBehavior doctor in Doctors)
@@ -108,6 +179,11 @@ void Start()
         return true;
     }
 
+    private bool IsPlayerDetected()
+    {
+        return !IsAllDoctorsPatrol();
+    }
+
     private bool IsPlayerRestrained()
     {
         return playerInteraction.GetQte() <= 0;
@@ -115,7 +191,7 @@ void Start()
     
     
 
-    public void PlayBGM(AudioClip clip)
+    private void PlayBGM(AudioClip clip)
     {
         if (audioSource.clip == clip) return; // 같은 음악이면 무시
         audioSource.clip = clip;
@@ -126,4 +202,9 @@ void Start()
     public void PlayPatrolBGM() => PlayBGM(PatrolBGM);
     public void PlayDetectedBGM() => PlayBGM(DetectedBGM);
     public void PlayRestrainedBGM() => PlayBGM(RestrainedBGM);
+    
+    private void StopBGM()
+    {
+        audioSource.Stop();
+    }
 }
