@@ -345,7 +345,7 @@ public class MapGenerator : MonoBehaviour
 
     void BuildCeiling()
     {
-        float thickness = 0.05f;
+        float thickness = 0.2f;
         float ceilY = floor_Y_Axis + wallHeight;
 
         var ceil = GameObject.CreatePrimitive(PrimitiveType.Cube);
