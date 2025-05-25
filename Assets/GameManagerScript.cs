@@ -43,6 +43,7 @@ public class GameManagerScript : MonoBehaviour
         mapGenerator.StartMapGeneration();
         musicManager.GameStart();
         playerInteraction = GameObject.Find("Player").GetComponent<PlayerInteraction>();
+        playerInteraction.InitInteraction();
     }
 
     public void OnClickRestart()
@@ -58,7 +59,7 @@ public class GameManagerScript : MonoBehaviour
     public void OnClickMainMenu()
     {
         uiManager.SetGamePauseUI(false);
-        musicManager.GameQuit();
+        musicManager.GameMainMenu();
         Cursor.lockState = CursorLockMode.None;
         DestroyImmediate(mapGenerator.transform.GetChild(0).gameObject);
         DestroyImmediate(playerInteraction.gameObject);

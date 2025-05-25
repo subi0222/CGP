@@ -13,7 +13,7 @@ public class MusicManagerScript : MonoBehaviour
     public AudioClip PatrolBGM;
     public AudioClip DetectedBGM;
     public AudioClip RestrainedBGM;
-    
+
     [Header("MusicManager")] public GameObject MusicManagerObject;
 
     private MusicManagerScript musicManager;
@@ -24,12 +24,14 @@ public class MusicManagerScript : MonoBehaviour
 
     private PlayerInteraction playerInteraction;
 
-    private  bool bGameOver = false;
+    private bool bGameOver = false;
 
-    private  bool bGamePaused = false;
+    private bool bGamePaused = false;
 
-    private  bool bGameStart = false;
+    private bool bGameStart = false;
     
+    private bool bGameEnd = false;
+
     private MusicState curState = MusicState.STATE_GAME_START;
 
     public enum MusicState
@@ -47,11 +49,11 @@ public class MusicManagerScript : MonoBehaviour
     {
         public MusicState curState;
         public CheckDelegate canChangeState;
-        public  ActionDelegate action;
+        public ActionDelegate action;
         public MusicState nextState;
 
         public delegate void ActionDelegate();
-        
+
         public delegate bool CheckDelegate();
 
         public EventActionEntry(MusicState state, CheckDelegate canChange, ActionDelegate action, MusicState next)
@@ -93,9 +95,13 @@ public class MusicManagerScript : MonoBehaviour
             new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsGamePaused, StopBGM, MusicState.STATE_GAME_PAUSE),
             new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsPlayerRestrained, PlayRestrainedBGM, MusicState.STATE_PLAYER_RESTRAINED),
             new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsPlayerDetected, PlayDetectedBGM, MusicState.STATE_PLAYER_DETECTED),
-            new EventActionEntry(MusicState.STATE_PLAYER_RESTRAINED, IsGamePaused, StopBGM, MusicState.STATE_GAME_PAUSE),
+            new EventActionEntry(MusicState.STATE_PLAYER_DETECTED, IsAllDoctorsPatrol, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
+            new EventActionEntry(MusicState.STATE_PLAYER_RESTRAINED, IsGameMainMenu, StopBGM, MusicState.STATE_GAME_START),
+            new EventActionEntry(MusicState.STATE_PLAYER_RESTRAINED, IsGameRestart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
+            new EventActionEntry(MusicState.STATE_PLAYER_RESTRAINED, IsPlayerRestrained, PlayRestrainedBGM, MusicState.STATE_PLAYER_RESTRAINED),
             new EventActionEntry(MusicState.STATE_GAME_PAUSE, IsGameMainMenu, StopBGM, MusicState.STATE_GAME_START),
-            new EventActionEntry(MusicState.STATE_GAME_PAUSE, IsGameRestart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL)
+            new EventActionEntry(MusicState.STATE_GAME_PAUSE, IsGameRestart, PlayPatrolBGM, MusicState.STATE_NPC_PATROL),
+            new EventActionEntry(MusicState.STATE_GAME_PAUSE, IsGameMainMenu, StopBGM, MusicState.STATE_GAME_START)
         };
     }
 
@@ -108,7 +114,7 @@ public class MusicManagerScript : MonoBehaviour
                 table[i].action();
                 curState = table[i].nextState;
             }
-        }   
+        }
     }
 
     public void GameStart()
@@ -130,29 +136,48 @@ public class MusicManagerScript : MonoBehaviour
     {
         bGameOver = true;
         bGameStart = false;
+        bGamePaused = false;
+        bGameEnd = true;
+    }
+
+    public void GameOver()
+    {
+        bGameOver = true;
+        bGameStart = false;
+        bGamePaused = false;
+        bGameEnd = false;
     }
 
     public void GamePause()
     {
         bGamePaused = true;
+        bGameStart = true;
+        bGameOver = false;
+        bGameEnd = false;
     }
 
     public void GameResume()
     {
         bGamePaused = false;
+        bGameStart = true;
+        bGameOver = false;
+        bGameEnd = false;
     }
 
     public void GameRestart()
     {
         bGameOver = false;
         bGameStart = true;
+        bGamePaused = false;
+        bGameEnd = false;
     }
 
-    public void GameQuit()
+    public void GameMainMenu()
     {
         bGameStart = false;
         bGameOver = false;
         bGamePaused = false;
+        bGameEnd = false;
     }
 
     private bool IsGameOver()
@@ -162,9 +187,9 @@ public class MusicManagerScript : MonoBehaviour
 
     private bool IsGameMainMenu()
     {
-        return !bGameStart;
+        return !bGameStart && !bGamePaused && !bGameEnd && !bGameOver;
     }
-    
+
     private bool IsGamePaused()
     {
         return bGamePaused;
@@ -172,19 +197,19 @@ public class MusicManagerScript : MonoBehaviour
 
     private bool IsGameRestart()
     {
-        return bGameStart && !bGamePaused;
+        return bGameStart && !bGamePaused && !bGameEnd && !bGameOver;
     }
-    
+
     private bool IsGameStart()
     {
-        return bGameStart;
+        return bGameStart && !bGamePaused && !bGameEnd && !bGameOver;
     }
 
     private bool IsAllDoctorsPatrol()
     {
         foreach (NPCDoctorBehavior doctor in Doctors)
         {
-            if (doctor.GetCurrentState() is NPCDoctorStateGrabPlayer || 
+            if (doctor.GetCurrentState() is NPCDoctorStateGrabPlayer ||
                 doctor.GetCurrentState() is NPCDoctorStateFollowingPlayer)
             {
                 return false;
@@ -200,10 +225,15 @@ public class MusicManagerScript : MonoBehaviour
 
     private bool IsPlayerRestrained()
     {
-        return playerInteraction.GetQte() <= 0;
+        return playerInteraction.IsDead();
     }
-    
-    
+
+    private bool IsGameResume()
+    {
+        return !bGamePaused && !bGameEnd && !bGameOver;
+    }
+
+
 
     private void PlayBGM(AudioClip clip)
     {
@@ -211,18 +241,21 @@ public class MusicManagerScript : MonoBehaviour
         {
             audioSource.clip = clip;
             audioSource.Play();
-            return;
         }
-        if (audioSource.clip == clip) return; // 같은 음악이면 무시
-        audioSource.clip = clip;
-        audioSource.Play();
+
+        if (audioSource.isPlaying && audioSource.clip != clip)
+        {
+            audioSource.Stop();
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
     }
 
     // 상황별 함수 예시
     public void PlayPatrolBGM() => PlayBGM(PatrolBGM);
     public void PlayDetectedBGM() => PlayBGM(DetectedBGM);
     public void PlayRestrainedBGM() => PlayBGM(RestrainedBGM);
-    
+
     private void StopBGM()
     {
         audioSource.Stop();

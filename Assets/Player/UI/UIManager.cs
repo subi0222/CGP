@@ -10,10 +10,10 @@ public class UIManager : MonoBehaviour
     public GameObject deathUI;
     public GameObject GameStartUI;
     public GameObject gamePauseUI;
-    
+
     private MusicManagerScript musicManager;
-    
-    
+
+
     public void Start()
     {
         qteUI.gameObject.SetActive(false);
@@ -27,8 +27,9 @@ public class UIManager : MonoBehaviour
     {
         Cursor.lockState = enable ? CursorLockMode.None : CursorLockMode.Locked;
         gamePauseUI.gameObject.SetActive(enable);
-        musicManager.GamePause();
         Time.timeScale = enable ? 0 : 1;
+        if(enable) musicManager.GamePause();
+        else musicManager.GameResume();
     }
 
     public void SetGameStartUI(bool enable)

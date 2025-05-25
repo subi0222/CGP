@@ -5,6 +5,9 @@ public class PlayerInteraction : MonoBehaviour
 {
     public UIManager uiManager;
     public PlayerAnimation playerAnimation;
+    
+    // 배경음악 상호작용입니다.
+    private MusicManagerScript musicManager;
 
     // 상호작용 게이지의 최대 양
     private const float MaxQte = 10f;
@@ -33,7 +36,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
     }
-    
+
     private void Update()
     {
         if (!_isDead && Input.GetKeyDown(KeyCode.Escape))
@@ -41,25 +44,25 @@ public class PlayerInteraction : MonoBehaviour
             _isPaused = !_isPaused;
             uiManager.SetGamePauseUI(_isPaused);
         }
-        
+
         switch (_state)
         {
             case State.Idle:
                 _safeTimer += Time.deltaTime;
                 break;
             case State.Attacked:
-            {
-                if (_qte > MaxQte) AttackedtoIdle();
-                if (Input.GetKeyDown(KeyCode.Space)) SetQte(_qte + 1f);
-                _attackTimer += Time.deltaTime;
-                if (_attackTimer >= (1 / difficulty))
                 {
-                    SetQte(_qte - 1f);
-                    _attackTimer = 0f;
+                    if (_qte > MaxQte) AttackedtoIdle();
+                    if (Input.GetKeyDown(KeyCode.Space)) SetQte(_qte + 1f);
+                    _attackTimer += Time.deltaTime;
+                    if (_attackTimer >= (1 / difficulty))
+                    {
+                        SetQte(_qte - 1f);
+                        _attackTimer = 0f;
+                    }
+                    if (_qte <= 0) KillPlayer();
+                    break;
                 }
-                if (_qte <= 0) KillPlayer();
-                break;
-            }
         }
     }
 
@@ -69,6 +72,8 @@ public class PlayerInteraction : MonoBehaviour
         uiManager.SetDeathUI(true);
         _isDead = true;
         Cursor.lockState = CursorLockMode.None;
+        musicManager = GameObject.Find("MusicManager").GetComponent<MusicManagerScript>();
+        musicManager.GameOver();
     }
 
     private void SetQte(float value)
@@ -76,7 +81,7 @@ public class PlayerInteraction : MonoBehaviour
         _qte = value;
         uiManager.SetQteValue(value / MaxQte);
     }
-    
+
     public void IdleToAttacked()
     {
         if (_state == State.Attacked || _safeTimer < 3f) return;
@@ -99,9 +104,21 @@ public class PlayerInteraction : MonoBehaviour
     {
         return _state == State.Attacked;
     }
-    
+
     public float GetQte()
     {
         return _qte;
+    }
+
+    public bool IsDead()
+    {
+        return _isDead;
+    }
+
+    public void InitInteraction()
+    {
+        _isPaused = false;
+        _isDead = false;
+        _state = State.Idle;
     }
 }
