@@ -69,9 +69,10 @@ public class ExitTile : MonoBehaviour
         // 1) 플레이어 입력 잠금
         if (_playerCtrl != null)
         {
+            _playerCtrl.Cleared();
             _playerCtrl.enabled = false;
-            var rb = _playerCtrl.GetComponent<Rigidbody>();
-            if (rb) rb.linearVelocity = Vector3.zero;
+            //var rb = _playerCtrl.GetComponent<Rigidbody>();
+            //if (rb) rb.AddForce(Vector3.zero, ForceMode.VelocityChange);
         }
 
         // 2) 카메라 전환

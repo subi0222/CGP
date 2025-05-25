@@ -104,6 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2424285170961042210}
   - component: {fileID: 4304121038624430787}
+  - component: {fileID: 4713668722779705662}
   m_Layer: 0
   m_Name: Thirdpersoncam
   m_TagString: Untagged
@@ -169,6 +170,23 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!114 &4713668722779705662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7386911044194489622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weight: 1
+  FocusTracking: 0
+  FocusTarget: {fileID: 0}
+  FocusOffset: 0
+  Profile: {fileID: 11400000, guid: 6b087ab91b38b994291730cd22f6d57a, type: 2}
 --- !u!1 &7717790195571347995
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,6 +232,7 @@ GameObject:
   - component: {fileID: 6703887838005467469}
   - component: {fileID: 6432225755271844859}
   - component: {fileID: 2375932472775495261}
+  - component: {fileID: 6990408505864487099}
   m_Layer: 0
   m_Name: Firstpersoncam
   m_TagString: Untagged
@@ -305,6 +324,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LookAtOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &6990408505864487099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8393381483209232259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weight: 1
+  FocusTracking: 0
+  FocusTarget: {fileID: 0}
+  FocusOffset: 0
+  Profile: {fileID: 11400000, guid: 6b087ab91b38b994291730cd22f6d57a, type: 2}
 --- !u!1001 &8255194930115486612
 PrefabInstance:
   m_ObjectHideFlags: 0

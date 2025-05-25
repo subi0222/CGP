@@ -16,9 +16,6 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
-        qteUI.gameObject.SetActive(false);
-        deathUI.gameObject.SetActive(false);
-        GameStartUI.gameObject.SetActive(false);
         gamePauseUI.gameObject.SetActive(false);
         musicManager = GameObject.Find("MusicManager").GetComponent<MusicManagerScript>();
     }

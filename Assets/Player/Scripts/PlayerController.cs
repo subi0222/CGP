@@ -86,6 +86,11 @@ public class PlayerController : MonoBehaviour
         playerInteraction.IdleToAttacked();
     }
     
+    public void Cleared()
+    {
+        playerAnimation.Cleared();
+    }
+    
     // 시야에 의사가 들어왔는지 처리하는 함수입니다.
     private void CheckDoctorsInView()
     {

@@ -21,4 +21,10 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.SetBool("Attacked", isAttacked);
     }
+    
+    public void Cleared()
+    {
+        anim.SetFloat(Xspeed, 0f);
+        anim.SetFloat(Yspeed, 0f);
+    }
 }
